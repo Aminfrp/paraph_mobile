@@ -5,7 +5,6 @@ import Input from '../../../../components/input';
 import RbSheet from '../../../../components/rbSheet';
 import * as keyStorage from '../../../../constants/keyStorage.ts';
 import {getAsyncStorage} from '../../../../helpers/asyncStorage';
-import {isCertificateExist} from "../../../../modules/certificate/rishe/certificate";
 
 type PasswordFiledPropsModel = {
   loading: boolean;
