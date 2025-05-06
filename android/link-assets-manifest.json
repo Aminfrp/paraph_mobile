@@ -1,0 +1,25 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Vazir-Bold.ttf",
+      "sha1": "623b1914adc76c404cbb663691e0c01f85e7c55f"
+    },
+    {
+      "path": "assets/fonts/Vazir-Medium.ttf",
+      "sha1": "c1c559a955309c1459c5eefb9854a18b9783b62b"
+    },
+    {
+      "path": "assets/fonts/Vazir-Thin.ttf",
+      "sha1": "8525a907d3d5cf49a12e8f51f1fb847185a08d2d"
+    },
+    {
+      "path": "assets/fonts/YekanBakh-Bold.ttf",
+      "sha1": "61897877f7d0551fd727b3a4b2a6bb7ce56deca6"
+    },
+    {
+      "path": "assets/fonts/Zocial.ttf",
+      "sha1": "0bda59c7bcd3d3927de047e091875a4428bfd1ab"
+    }
+  ]
+}

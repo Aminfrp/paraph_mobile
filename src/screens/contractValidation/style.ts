@@ -1,0 +1,96 @@
+import {StyleSheet} from 'react-native';
+import colors from '../../assets/theme/colors';
+
+export default StyleSheet.create({
+  wrapper: {
+    // backgroundColor: colors.secondary.gray,
+    flexDirection: 'column',
+    flex: 1,
+    // justifyContent: 'space-between',
+    paddingVertical: 20,
+  },
+  headerWrapper: {},
+  title: {
+    color: colors.accent,
+    paddingBottom: 15,
+    textDecorationStyle: 'solid',
+    textDecorationColor: '#000',
+    textAlign: 'center',
+    paddingTop: 4,
+    fontSize: 22,
+    fontFamily: 'YekanBakh-Bold',
+  },
+  headerText: {
+    color: colors.accent,
+    fontFamily: 'Vazir-Thin',
+    fontSize: 15,
+    marginTop: 1,
+    marginBottom: 5,
+    textAlign: 'center',
+    paddingHorizontal: 20,
+  },
+  fileUploaderLabel: {
+    color: colors.primary.grayDark,
+    fontFamily: 'Vazir-Thin',
+    fontSize: 15,
+    marginTop: 1,
+    marginBottom: 5,
+  },
+  fileUploader: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    padding: 15,
+    borderRadius: 4,
+    borderColor: colors.primary.gray,
+    borderBottomWidth: 1,
+  },
+  form: {
+    padding: 20,
+  },
+  userNameWrapper: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  userNameInputWrapper: {
+    width: '49%',
+  },
+  error: {
+    color: colors.primary.danger,
+    fontFamily: 'YekanBakh-Bold',
+    paddingTop: 4,
+    fontSize: 12,
+    textAlign: 'right',
+  },
+  buttonWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  notValidHeaderWrapper: {
+    paddingHorizontal: 15,
+  },
+  notValidTitle: {
+    color: colors.warning,
+    paddingBottom: 15,
+    textDecorationStyle: 'solid',
+    textDecorationColor: '#000',
+    textAlign: 'center',
+    paddingTop: 15,
+    fontSize: 20,
+    fontFamily: 'YekanBakh-Bold',
+  },
+  notValidHeaderText: {
+    color: colors.accent,
+    paddingBottom: 10,
+    textDecorationStyle: 'solid',
+    textDecorationColor: '#000',
+    textAlign: 'center',
+    paddingTop: 15,
+    fontSize: 16,
+    fontFamily: 'YekanBakh-Bold',
+  },
+});
