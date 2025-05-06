@@ -37,6 +37,7 @@ import {
   getSubject,
   revokeByCertificate,
 } from './service';
+import debugLogger from "../../../../helpers/debugLogger";
 
 const certificateType: ValueOf<CertificateTypeEnum> = CertificateTypeEnum.rishe;
 
@@ -97,7 +98,8 @@ export const generate = async (
   }
 };
 
-export const revoke = async (password: string, certificate: string) => {
+// revoke rishe certificate
+export const revoke = async (certificate: string) => {
   try {
     const revokedResponse = await revokeByCertificate(certificate);
     if (revokedResponse) {
@@ -196,6 +198,7 @@ export const getDetailsInTheWorld = async () => {
   }
 };
 
+// get rishe certificate list
 export const getCertificateList = async () => {
   try {
     return await getCertificates();
@@ -204,33 +207,33 @@ export const getCertificateList = async () => {
   }
 };
 
-const isPasswordValid = async (password: string) => {
-  try {
-
-    const certificateEncryptedContent: string | undefined = await readCertificateFile(certificateType);
-
-
-    if (certificateEncryptedContent) {
-      const ssoID = await getLoggedInUserSSOID();
-
-      const certificate = await decryptCertificateData(
-        ssoID,
-        password,
-        certificateEncryptedContent,
-      );
-
-      if (certificate) {
-        return Promise.resolve(true);
-      }
-    }
-
-    return Promise.resolve(false);
-  } catch (error) {
-    await certificateLogger('error', error);
-    Logger.debugLogger('error in isPasswordValid: ', error);
-    return Promise.reject({error_description: 'رمز وارد شده مطابقت ندارد'});
-  }
-};
+// const isPasswordValid = async (password: string) => {
+//   try {
+//
+//     const certificateEncryptedContent: string | undefined = await readCertificateFile(certificateType);
+//
+//
+//     if (certificateEncryptedContent) {
+//       const ssoID = await getLoggedInUserSSOID();
+//
+//       const certificate = await decryptCertificateData(
+//         ssoID,
+//         password,
+//         certificateEncryptedContent,
+//       );
+//
+//       if (certificate) {
+//         return Promise.resolve(true);
+//       }
+//     }
+//
+//     return Promise.resolve(false);
+//   } catch (error) {
+//     await certificateLogger('error', error);
+//     Logger.debugLogger('error in isPasswordValid: ', error);
+//     return Promise.reject({error_description: 'رمز وارد شده مطابقت ندارد'});
+//   }
+// };
 
 const certificateInvoiceCreatedStatus = async () => {
   try {
@@ -255,30 +258,7 @@ const certificateInvoiceCreatedStatus = async () => {
   }
 };
 
-const isKeyIdExistInRevoke = async (keyId: string) => {
-  if (!keyId) {
-    await certificateLogger(
-      'error',
-      'there is not any active invoice for revokeCertificate',
-    );
-
-    Toast.showToast('danger', 'خطا', 'خطا در دریافت فاکتور!');
-    return Promise.resolve(false);
-  }
-  return Promise.resolve(true);
-};
-
-const isCertificateExistInRevoke = async (certificate: any) => {
-  if (!certificate) {
-    await certificateLogger(
-      'error',
-      'there is not any active certificate for revokeCertificate',
-    );
-    return Promise.resolve(false);
-  }
-  return Promise.resolve(true);
-};
-
+// generate rishe certificate
 const generateCertificateByCSR = async (
   pairs: PairsModel,
   params: RisheGenerateInputModel,
@@ -334,6 +314,7 @@ const generateCertificateByCSRService = async (
   }
 };
 
+// check certificate inquiry
 const risheInquiry = async (keyId: string, requestId: string) => {
   try {
     const response = await risheInquiryService(keyId, requestId);
@@ -376,11 +357,41 @@ const generateCertificateByCSRServiceErrorHandler = (error: any) => {
   return Promise.reject(error);
 };
 
-export const isCertificateExistOnDevice =  async () => {
+// check certificate file on device
+export const certificateFileData =  async () => {
   try {
      return await readCertificateFile(certificateType)
   }catch (error) {
     Logger.debugLogger('error in readCertificate file: ', error);
+    return Promise.reject(error);
+  }
+}
+
+// check certificate file and rishe certificate is equal
+export const compareCertificateWithFile = async (certificate:string,password:string) => {
+  try{
+    const certificateFile = await certificateFileData();
+    debugger
+    if (!certificateFile) return false;
+    if (certificateFile) {
+      debugger
+      const ssoID = await getLoggedInUserSSOID();
+      debugger
+
+      const decryptedCertificate = await decryptCertificateData(
+        ssoID,
+        password,
+          certificateFile,
+      );
+      debugger
+
+      if (decryptedCertificate === certificate) {
+      debugger
+        return Promise.resolve(true);
+      }
+    }
+  }catch(error){
+    debugLogger('error in compareCertificateWithFile: ', error);
     return Promise.reject(error);
   }
 }

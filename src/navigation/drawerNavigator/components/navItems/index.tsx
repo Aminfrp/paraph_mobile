@@ -13,6 +13,7 @@ import * as routesName from '../../../../constants/routesName';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../../../assets/theme/colors';
+import Button from "../../../../components/button";
 
 type PropsModel = {
   navigation: any;

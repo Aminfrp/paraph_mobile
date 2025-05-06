@@ -71,6 +71,7 @@ export default StyleSheet.create({
     fontSize: 14,
     fontFamily: 'YekanBakh-Bold',
     marginTop: 10,
+    marginRight: 10,
   },
   certificateDataCardDateWrapper: {
     flexDirection: 'row-reverse',
@@ -79,13 +80,14 @@ export default StyleSheet.create({
     marginVertical: 10,
   },
   certificateDataCardDateText: {
-    color: '#253858',
+    color: '#7A869A',
     fontSize: 16,
     fontFamily: 'YekanBakh-Bold',
   },
   certificateDataCardSmallIcon: {
     width: 25,
     height: 25,
+    marginRight: 5,
   },
   certificateDataCardDivider: {
     borderBottomWidth: 1,
@@ -99,8 +101,21 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   deviceCertificateExistText: {
-    color: "tomato",
-    fontWeight: 'bold',
+    color: "#ff0000",
     fontFamily: 'YekanBakh-Bold',
+    flex:1
+  },
+  deviceAndRisheCertificateExistContainer:{
+    flexDirection: 'row',
+    gap:5
+  },
+  deviceAndRisheCertificateExistText:{
+    fontFamily: 'YekanBakh-Bold',
+    fontSize: 16,
+    flex:1
+  },
+  deviceAndRisheCertificateExistIcon:{
+    width: 32,
+    height: 20,
   }
 });

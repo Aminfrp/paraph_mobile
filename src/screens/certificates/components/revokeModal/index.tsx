@@ -1,17 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import Button from '../../../../components/button';
-import Input from '../../../../components/input';
 import RbSheet from '../../../../components/rbSheet';
 import * as keyStorage from '../../../../constants/keyStorage.ts';
 import {getAsyncStorage} from '../../../../helpers/asyncStorage';
-
-type PasswordFiledPropsModel = {
-  loading: boolean;
-  show: boolean;
-  onClose: () => void;
-  onRevoke: (password: string) => void;
-};
 
 type ConditionPropsModel = {
   loading: boolean;
@@ -31,98 +23,7 @@ type RevokeModalPropsModel = {
   loading: boolean;
   show: boolean;
   onClose: () => void;
-  onRevoke: (password: string) => Promise<void>;
-};
-
-const PasswordFiledSheet: React.FC<PasswordFiledPropsModel> = props => {
-  const {loading, show, onClose, onRevoke} = props;
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const refRBSheet = useRef();
-
-  const onPasswordChange = (_pass: string) => {
-    if (passwordError) {
-      setPasswordError(null);
-    }
-    setPassword(_pass);
-  };
-
-  const revokeHandler = () => {
-    if (password && password !== '') {
-      return onRevoke(password);
-    }
-    setPasswordError('لطفا رمز خود را وارد نمایید');
-  };
-
-  return (
-    <View>
-      <RbSheet
-        ref={refRBSheet}
-        disabled={true}
-        height={380}
-        visible={show}
-        onClose={onClose}
-        closeOnPressBack={false}
-        closeOnDragDown={false}
-        closeOnPressMask={false}>
-        <View style={{padding: 10}}>
-          <Text
-            style={[
-              styles.titleText,
-              {
-                textAlign: 'center',
-                borderColor: '#EBECF0',
-                borderBottomWidth: 1,
-              },
-            ]}>
-            ابطال گواهی امضاء دیجیتال
-          </Text>
-
-          <Text style={[styles.titleText, {fontSize: 18, borderWidth: 0}]}>
-            وارد کردن رمز عبور
-          </Text>
-
-          <Text style={[styles.text]}>
-            برای ابطال گواهی امضای دیجیتال خود، رمز عبوری که موقع صدور گواهی
-            تعیین کرده‌اید را وارد کنید
-          </Text>
-
-          <View style={{paddingHorizontal: 10}}>
-            <Input
-              onChangeText={(value: string) => onPasswordChange(value)}
-              label="رمز عبور"
-              error={passwordError}
-              keyboardType="number-pad"
-              placeholder="رمز عبور گواهی امضای خود را بنویسید"
-              size="sm"
-              textHidden={true}
-            />
-
-            <View style={styles.btnGroupWrapper}>
-              <View style={styles.btnWrapper}>
-                <Button
-                  title="تایید"
-                  type="success"
-                  onPress={revokeHandler}
-                  loading={loading}
-                  disabled={loading}
-                />
-              </View>
-              <View style={styles.btnWrapper}>
-                <Button
-                  title="انصراف"
-                  type="white-outline"
-                  onPress={onClose}
-                  loading={false}
-                  disabled={loading}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-      </RbSheet>
-    </View>
-  );
+  onRevoke: () => Promise<void>;
 };
 
 const RevokedStatusSheet: React.FC<ModalPropsModel> = props => {
@@ -310,10 +211,9 @@ const Index: React.FC<RevokeModalPropsModel> = props => {
     onClose();
   };
 
-  const revokeHandler = async (password: string) => {
+  const revokeHandler = async () => {
     try {
-      await onRevoke(password);
-
+      await onRevoke();
       setStep('STATUS-SUCCESS');
       setStatusMessage('');
     } catch (error: any) {
@@ -325,19 +225,6 @@ const Index: React.FC<RevokeModalPropsModel> = props => {
   if (step === 'CONDITIONS')
     return (
       <RevokeConditionsSheet
-        loading={loading}
-        show={show}
-        onClose={closeHandler}
-        onRevoke={() => {
-          // isCertificateExist()
-          setStep('PASSWORD')
-        }}
-      />
-    );
-
-  if (step === 'PASSWORD')
-    return (
-      <PasswordFiledSheet
         loading={loading}
         show={show}
         onClose={closeHandler}
