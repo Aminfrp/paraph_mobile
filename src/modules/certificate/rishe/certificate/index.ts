@@ -345,35 +345,8 @@ const risheInquiry = async (keyId: string, requestId: string) => {
 };
 
 const revokeCertificateErrorHandler = (error: any) => {
-  // let errResponse = null;
-  //
-  // if (!error?.error_description) {
-  //   if (error?.data?.response?.data) {
-  //     errResponse = error?.data?.response?.data;
-  //   } else {
-  //     errResponse = {
-  //       error_description:
-  //         error?.errorMessage?.message || 'خطا در ابطال گواهی ریشه',
-  //     };
-  //   }
-  // } else {
-  //   errResponse = error;
-  // }
-  //
-  // const {error_description} = errResponse;
-
-  // if (error_description) {
-  //   Toast.showToast(
-  //     'danger',
-  //     'گواهی ریشه',
-  //     error_description.toString() || 'خطا در ابطال گواهی ریشه با keyId',
-  //   );
-  // }
-
   Toast.showToast('danger', 'ابطال گواهی', 'خطا در ابطال گواهی');
-
   Logger.debugLogger('error in revokeCertificateErrorHandler: ', error);
-
   return Promise.reject(error);
 };
 
