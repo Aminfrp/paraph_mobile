@@ -32,10 +32,6 @@ const certificateType: CertificateTypeEnum.rishe = CertificateTypeEnum.rishe;
 export const checkInvoice = async () => {
   try {
     const invoices = await getCertificateInvoices(certificateType);
-    // const SystemInvoices = await getCertificateInvoices(certificateType, false);
-    // const deviceInvoice = deviceInvoices && deviceInvoices[0];
-    // const systemInvoice = SystemInvoices && SystemInvoices[0];
-
     if (
       invoices.length &&
       getInvoiceStatus(invoices[0]) === InvoiceStatuses.created

@@ -117,8 +117,6 @@ const Index: React.FC = props => {
         ) : (
           <Certificates
             onInfo={toggleCertificateInfoBanner}
-            isRisheCertificateExist={isRisheCertificateExist}
-            isNamadCertificateExist={isNamadCertificateExist}
             onRevoke={(type: string, certificate) =>
               setRevokeModalData({show: true, type, certificate})
             }

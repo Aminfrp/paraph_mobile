@@ -30,9 +30,7 @@ const Index: React.FC<PropsModel> = props => {
   const {certificateState} = useContext<any>(CertificateContext);
   const namadProduct: ProductInvoice = certificateState?.namadProduct?.data;
   const risheProduct: ProductInvoice = certificateState?.risheProduct?.data;
-  const [showPasswordModal, setShowPasswordModal] = React.useState(false);
   const [showCertificate, setShowCertificate] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
 
   const namadCost =
     (namadProduct &&
@@ -62,24 +60,6 @@ const Index: React.FC<PropsModel> = props => {
     ).toLocaleDateString('fa-IR')}`;
   };
 
-  const onInquiry = () => {
-    setShowPasswordModal(true);
-  };
-
-  const handleInquiry = async (certificate: string, password: string) => {
-    try {
-      setLoading(true);
-      const res = await compareCertificateWithFile(certificate, password);
-      if (res) {
-        setShowCertificate(true);
-      }
-      setShowPasswordModal(false);
-      setLoading(false);
-    } catch (e) {
-      setShowPasswordModal(false);
-      setLoading(false);
-    }
-  };
   return (
     <View style={{}}>
       <Text style={styles.textTitle}>گواهی‌های امضای دیجیتال شما</Text>
@@ -99,18 +79,7 @@ const Index: React.FC<PropsModel> = props => {
                 onRevoke={() => onRevoke(CertificateTypeEnum.rishe, item.item)}
                 onInfo={onRisheInfo}
                 price={risheCost}
-                onInquiry={onInquiry}
                 showCertificate={showCertificate}
-              />
-              <PasswordModal
-                show={showPasswordModal}
-                onInquiry={password =>
-                  handleInquiry(item.item.certificate, password)
-                }
-                loading={loading}
-                onClose={() => {
-                  setShowPasswordModal(false);
-                }}
               />
             </>
           )}

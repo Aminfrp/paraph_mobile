@@ -13,7 +13,6 @@ type PropsModel = {
   onBuy: () => void;
   onRevoke: () => void;
   onInfo: () => void;
-  onInquiry: () => void;
   price?: string;
   showCertificate: boolean;
 };
@@ -29,7 +28,6 @@ const Index: React.FC<PropsModel> = props => {
     onBuy,
     onRevoke,
     onInfo,
-    onInquiry,
     showCertificate,
   } = props;
 
@@ -79,23 +77,8 @@ const Index: React.FC<PropsModel> = props => {
             قبلی را ابطال کنید و سپس برای خرید گواهی جدید اقدام نمایید. در غیر
             این صورت، از گواهی موجود روی دستگاه قبلی استفاده کنید.
           </Text>
-          {/*<Image*/}
-          {/*    source={require('../../../../assets/img/png/red_warning.png')}*/}
-          {/*    resizeMode="contain"*/}
-          {/*    style={styles.deviceAndRisheCertificateExistIcon}*/}
-          {/*/>*/}
         </View>
       )}
-      {/*{!isCertificateExist && showCertificate && <View style={styles.deviceAndRisheCertificateExistContainer}>*/}
-      {/*    <Text style={styles.deviceAndRisheCertificateExistText}>*/}
-      {/*        جهت استفاده از گواهی ریشه در این دستگاه ابتدا گواهی خود را اعتبار سنجی کنید.*/}
-      {/*    </Text>*/}
-      {/*    <Image*/}
-      {/*        source={require('../../../../assets/img/png/warning.png')}*/}
-      {/*        resizeMode="contain"*/}
-      {/*        style={styles.deviceAndRisheCertificateExistIcon}*/}
-      {/*    />*/}
-      {/*</View>}*/}
 
       <View style={styles.certificateDataCardDivider} />
       <View style={styles.certificateDataCardFooter}>
@@ -108,13 +91,6 @@ const Index: React.FC<PropsModel> = props => {
         </TouchableOpacity>
         <View
           style={[styles.noCertificateBoughtCertificateBtnGroup, {gap: 15}]}>
-          {/*{!isCertificateExist && <Button*/}
-          {/*    title="اعتبار سنجی گواهی ریشه"*/}
-          {/*    type="success"*/}
-          {/*    onPress={onInquiry}*/}
-          {/*    loading={false}*/}
-          {/*    disabled={false}*/}
-          {/*/>}*/}
           {!isBought ? (
             <Button
               title="خرید گواهی"
