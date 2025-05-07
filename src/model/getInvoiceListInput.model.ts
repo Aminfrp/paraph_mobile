@@ -8,5 +8,5 @@ export type GetInvoiceListInputModel = {
   is?: string;
   certificateType?: string;
   keyIdResponse?: string;
-  payed?:boolean;
+  payed?: boolean;
 };

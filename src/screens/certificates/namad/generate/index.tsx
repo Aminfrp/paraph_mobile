@@ -129,7 +129,6 @@ const Index: React.FC = () => {
 
   const onGenerate = async () => {
     try {
-
       setGenerateLoading(true);
       if (userFieldsValidation()) {
         const ssoId: number = await getLoggedInUserSSOID();

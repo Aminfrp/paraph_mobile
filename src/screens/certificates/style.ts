@@ -101,21 +101,21 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   deviceCertificateExistText: {
-    color: "#ff0000",
+    color: '#ff0000',
     fontFamily: 'YekanBakh-Bold',
-    flex:1
+    flex: 1,
   },
-  deviceAndRisheCertificateExistContainer:{
+  deviceAndRisheCertificateExistContainer: {
     flexDirection: 'row',
-    gap:5
+    gap: 5,
   },
-  deviceAndRisheCertificateExistText:{
+  deviceAndRisheCertificateExistText: {
     fontFamily: 'YekanBakh-Bold',
     fontSize: 16,
-    flex:1
+    flex: 1,
   },
-  deviceAndRisheCertificateExistIcon:{
+  deviceAndRisheCertificateExistIcon: {
     width: 32,
     height: 20,
-  }
+  },
 });

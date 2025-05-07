@@ -5,7 +5,7 @@ import {ParaphResponseModel} from '../../model/paraphResponse.model';
 import onApiCallingError from '../../modules/apiCaller/onApiCallingError';
 import onApiCallingSuccess from '../../modules/apiCaller/onApiCallingSuccess';
 import servicesResponseValidation from '../../modules/validation/apiResponseValidation/servicesResponseValidation';
-import debugLogger from "../../helpers/debugLogger";
+import debugLogger from '../../helpers/debugLogger';
 
 export default async (certificate: string) => {
   const refId = refIdGenerator();
@@ -41,9 +41,7 @@ const fetchJSON = (certificate: string) => {
     },
   };
   const certificateEncode = encodeURIComponent(certificate);
-  debugLogger("certificateEncode", certificateEncode);
-  ;
-
+  debugLogger('certificateEncode', certificateEncode);
   return ApiCaller(options).delete(
     `${SERVER_URL}api/certificate/rishe/revoke/certificate?certificate=${certificateEncode}`,
   );

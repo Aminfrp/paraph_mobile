@@ -19,7 +19,6 @@ export class NativeEncryptionModule {
     initialVector: string,
     encryptingObject: string,
   ) {
-
     try {
       return await EncryptionUtil.encryptWithAES(
         secret,
@@ -37,7 +36,6 @@ export class NativeEncryptionModule {
     initialVector: string,
     decryptedObject: string,
   ) {
-    ;
     try {
       return await EncryptionUtil.decryptWithAES(
         secret,

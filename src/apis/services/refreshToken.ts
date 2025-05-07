@@ -48,7 +48,6 @@ export default async (postData: {refresh_token: string}) => {
       errorMessage: null,
     };
   } catch (error) {
-
     onApiCallingError({params: {}, refId, error}, caller);
 
     return Promise.reject({

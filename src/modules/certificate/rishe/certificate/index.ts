@@ -37,7 +37,7 @@ import {
   getSubject,
   revokeByCertificate,
 } from './service';
-import debugLogger from "../../../../helpers/debugLogger";
+import debugLogger from '../../../../helpers/debugLogger';
 
 const certificateType: ValueOf<CertificateTypeEnum> = CertificateTypeEnum.rishe;
 
@@ -111,10 +111,9 @@ export const revoke = async (certificate: string) => {
       const successfulMessage =
         revokedResponse || 'گواهی شما با موفقیت ابطال گردید';
       Toast.showToast('success', 'ابطال گواهی', successfulMessage);
-      return revokedResponse
+      return revokedResponse;
     }
   } catch (error) {
-    ;
     Logger.debugLogger('error in revoke: ', error);
     await certificateLogger('error', error);
     await revokeCertificateErrorHandler(error);
@@ -147,7 +146,6 @@ export const sign = async (password: string, hash: string, ssoID: number) => {
       'signature created by certificate in sign by certificate',
     );
 
-    ;
     return Promise.resolve({
       signature,
       pairs: certificate.pairs,
@@ -237,19 +235,16 @@ export const getCertificateList = async () => {
 
 const certificateInvoiceCreatedStatus = async () => {
   try {
-
     const invoices = await getCertificateInvoices(certificateType);
 
     const invoice = getLastInvoice(invoices);
 
     const billNumber = invoice && getInvoiceBillNumber(invoice);
 
-
     const response = await changeInvoiceStatusByBillNumber(
       billNumber,
       InvoiceStatuses.created,
     );
-
 
     return Promise.resolve(response);
   } catch (error) {
@@ -265,7 +260,6 @@ const generateCertificateByCSR = async (
 ) => {
   try {
     const subjectData = await getSubject({...params});
-    ;
     const csr = await NativeEncryptionModule.createSignCSR(
       subjectData,
       pairs.private,
@@ -282,7 +276,6 @@ const generateCertificateByCSR = async (
       csr,
       keyId: params.keyId,
     });
-    ;
     let certificate = '';
     for (let index = 0; index < 20; index++) {
       const response = await risheInquiry(
@@ -358,40 +351,43 @@ const generateCertificateByCSRServiceErrorHandler = (error: any) => {
 };
 
 // check certificate file on device
-export const certificateFileData =  async () => {
+export const certificateFileData = async () => {
   try {
-     return await readCertificateFile(certificateType)
-  }catch (error) {
+    return await readCertificateFile(certificateType);
+  } catch (error) {
     Logger.debugLogger('error in readCertificate file: ', error);
     return Promise.reject(error);
   }
-}
+};
 
 // check certificate file and rishe certificate is equal
-export const compareCertificateWithFile = async (certificate:string,password:string) => {
-  try{
+export const compareCertificateWithFile = async (
+  certificate: string,
+  password: string,
+) => {
+  try {
     const certificateFile = await certificateFileData();
-    debugger
+    debugger;
     if (!certificateFile) return false;
     if (certificateFile) {
-      debugger
+      debugger;
       const ssoID = await getLoggedInUserSSOID();
-      debugger
+      debugger;
 
       const decryptedCertificate = await decryptCertificateData(
         ssoID,
         password,
-          certificateFile,
+        certificateFile,
       );
-      debugger
+      debugger;
 
       if (decryptedCertificate === certificate) {
-      debugger
+        debugger;
         return Promise.resolve(true);
       }
     }
-  }catch(error){
+  } catch (error) {
     debugLogger('error in compareCertificateWithFile: ', error);
     return Promise.reject(error);
   }
-}
+};

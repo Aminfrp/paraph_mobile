@@ -11,13 +11,10 @@ export default async (postData: SignByCertificateInputModel) => {
   const refId = refIdGenerator();
   const caller = '[ServiceCall]-signByCertificate';
   try {
-    ;
     const response: ApiResponseModel<AppServerResponseModel> = await fetchJSON(
       postData,
     );
-    ;
     const data = await responseValidation(response);
-    ;
     onApiCallingSuccess({params: {}, refId, response}, caller);
 
     return {
@@ -50,7 +47,6 @@ const fetchJSON = (postData: SignByCertificateInputModel) => {
     needAccessToken: true,
     data: formData,
   };
-  ;
   return ApiCaller(options).post(
     `${SERVER_URL}api/contract/sign/${postData.id}/cert`,
   );

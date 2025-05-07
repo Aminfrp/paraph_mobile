@@ -40,7 +40,6 @@ const Index: React.FC = () => {
       //     );
       //   }
       // }
-      ;
       await buyRisheCertificate();
 
       setLoading(false);

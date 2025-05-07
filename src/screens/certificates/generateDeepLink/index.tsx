@@ -24,10 +24,8 @@ const Index: React.FC = () => {
   }, []);
 
   const handleOpenURL = async () => {
-    ;
     if (keyId) {
       const invoice: InvoiceModel = await getInvoiceByKeyId(keyId);
-      ;
       if (invoice) {
         const certificateType =
           invoice?.metadata?.clientMetadata[0]?.certificateType;
@@ -66,7 +64,6 @@ const Index: React.FC = () => {
       };
 
       const response = await getInvoiceListWithMetadataSearchService(postData);
-      ;
       const data = response && response.data.result;
 
       return Promise.resolve(data[0]);

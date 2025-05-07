@@ -37,9 +37,11 @@ const Index: React.FC = props => {
   const [certificates, setCertificates] = useState<CertificateModel[]>([]);
   const navigation = useNavigation();
 
-  const onBuy = () => navigation.navigate(routesName.RISHE_CERTIFICATE_REQUEST_PAYMENT as never);
+  const onBuy = () =>
+    navigation.navigate(routesName.RISHE_CERTIFICATE_REQUEST_PAYMENT as never);
 
-  const toggleCertificateInfoBanner = (show = false, type = 'rishe'): void => setShowBanner({show, type});
+  const toggleCertificateInfoBanner = (show = false, type = 'rishe'): void =>
+    setShowBanner({show, type});
 
   const revokeNamad = async (password: string) => {
     try {

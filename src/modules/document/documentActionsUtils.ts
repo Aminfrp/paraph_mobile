@@ -107,7 +107,6 @@ export class DocumentActionsUtils extends DocumentUtils {
       const signResponse = response && response.data;
       return Promise.resolve(signResponse);
     } catch (error: any) {
-      ;
       Logger.debugLogger('error in callSignByCertificateService: ', error);
       return Promise.reject(error);
     }
@@ -309,7 +308,6 @@ export class DocumentActionsUtils extends DocumentUtils {
         }
       }
     } catch (error: any) {
-      ;
       return this.signByCertificateErrorCallback(error);
     }
   }

@@ -48,8 +48,6 @@ export const getByKeyId = async (keyId: string) => {
   try {
     const response = await rcGetKeysService(keyId);
     const data = response && response.data;
-    ;
-
     return Promise.resolve(data);
   } catch (error) {
     Logger.debugLogger('error in getByKeyId: ', error);
@@ -59,8 +57,6 @@ export const getByKeyId = async (keyId: string) => {
 
 export const revokeByCertificate = async (certificate: string) => {
   try {
-    ;
-
     const response = await rcRevokeByCertificateService(certificate);
     const data = response && response.data;
 

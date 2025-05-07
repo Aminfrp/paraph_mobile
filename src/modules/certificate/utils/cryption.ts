@@ -67,7 +67,6 @@ export const getPodEcdhKeyPair = async (ssoId: number) => {
     };
     const response = await getPodEcdhKeyPairService(postData);
     const data = response && response.data;
-    ;
     Logger.debugLogger('key', data);
     return Promise.resolve(data);
   } catch (error) {
@@ -105,8 +104,7 @@ export const decryptCertificateData = async (
       decryptedContent,
     );
 
-
-    console.log("cert Content",certificateContent)
+    console.log('cert Content', certificateContent);
 
     if (!certificateContent) {
       await certificateLogger('error', 'error in decrypt file');
@@ -114,17 +112,12 @@ export const decryptCertificateData = async (
     }
 
     const certificateDecodedData = await decode(certificateContent.data);
-    ;
-
     Logger.debugLogger('certiiiii', certificateDecodedData);
 
     const certificate = await JSON.parse(ab2str(certificateDecodedData));
-    ;
-
     return Promise.resolve(certificate);
   } catch (error) {
     Logger.debugLogger('error in decryptCertificateData: ', error);
-    ;
     return Promise.reject(error);
   }
 };
@@ -145,25 +138,20 @@ export const encryptCertificateData = async <T>(
   certificate: T,
 ) => {
   try {
-
     const secret = await generateSecretByKeyPairs(ssoID);
 
-
     const initialVector = await generateInitialVector(userPassInput, ssoID);
-
 
     const {secretKey, iv, encryptingData} =
       getBase64EncryptingCertificateObject(secret, initialVector, {
         ...certificate,
       });
 
-
     const encryptedData = await NativeEncryptionModule.encryptWithAES(
       secretKey,
       iv,
       encryptingData,
     );
-
 
     return Promise.resolve(encryptedData);
   } catch (error) {

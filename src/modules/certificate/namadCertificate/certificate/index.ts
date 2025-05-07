@@ -69,23 +69,18 @@ export const generate = async (
         pairs,
       };
 
-
-
       const encryptedCertificateData = await encryptCertificateData(
         ssoID,
         userPassInput,
         certificateFileObjectData,
       );
 
-
       await writeCertificateFile(
         certificateType,
         encryptedCertificateData.data,
       );
 
-
       // await certificateInvoiceCreatedStatus();
-
 
       await certificateLogger(
         'info',
@@ -166,7 +161,6 @@ export const sign = async (password: string, hash: string, ssoID: number) => {
       'info',
       'signature created by certificate in sign by certificate',
     );
-
 
     return Promise.resolve({
       signature,

@@ -113,7 +113,6 @@ export const generatePaymentUrlByInvoice = async (invoice: InvoiceModel) => {
       gateway: 'LOC',
     };
 
-    ;
     let URL = `${PAYMENT_GATEWAY_URL}?${convertJsonToQueryString(
       paymentQueryParams,
     )}`;

@@ -16,8 +16,8 @@ import {ProductInvoice} from '../../../../model/productInvoice.model';
 import numberSeparator from '../../../../modules/converter/numberSeparator';
 import styles from '../../style';
 import CertificateDataCard from '../certificateDataCard';
-import PasswordModal from "../passwordModal/PasswordModal.tsx";
-import {compareCertificateWithFile} from "../../../../modules/certificate/rishe/certificate";
+import PasswordModal from '../passwordModal/PasswordModal.tsx';
+import {compareCertificateWithFile} from '../../../../modules/certificate/rishe/certificate';
 type PropsModel = {
   onInfo: (show: boolean, type: string) => void;
   onRevoke: (type: string, certificate: CertificateModel) => void;
@@ -25,11 +25,7 @@ type PropsModel = {
 };
 
 const Index: React.FC<PropsModel> = props => {
-  const {
-    onInfo,
-    onRevoke,
-    certificates,
-  } = props;
+  const {onInfo, onRevoke, certificates} = props;
   const {navigate} = useNavigation();
   const {certificateState} = useContext<any>(CertificateContext);
   const namadProduct: ProductInvoice = certificateState?.namadProduct?.data;
@@ -66,21 +62,22 @@ const Index: React.FC<PropsModel> = props => {
     ).toLocaleDateString('fa-IR')}`;
   };
 
-  const onInquiry = () => {setShowPasswordModal(true)};
+  const onInquiry = () => {
+    setShowPasswordModal(true);
+  };
 
-  const handleInquiry = async (certificate:string,password:string) => {
+  const handleInquiry = async (certificate: string, password: string) => {
     try {
-    setLoading(true)
-    const res = await compareCertificateWithFile(certificate,password)
-    if(res){
-      setShowCertificate(true)
-    }
+      setLoading(true);
+      const res = await compareCertificateWithFile(certificate, password);
+      if (res) {
+        setShowCertificate(true);
+      }
       setShowPasswordModal(false);
-      setLoading(false)
-
-    }catch (e){
+      setLoading(false);
+    } catch (e) {
       setShowPasswordModal(false);
-      setLoading(false)
+      setLoading(false);
     }
   };
   return (
@@ -91,26 +88,33 @@ const Index: React.FC<PropsModel> = props => {
           data={certificates}
           keyExtractor={(_, index) => index.toString()}
           renderItem={item => (
-              <>
-                <CertificateDataCard
-                  isBought={certificates.length > 0}
-                  title={item.item.cn}
-                  state="شما یک گواهی فعال با مشخصات بالا دارید"
-                  dateText={() => getCertDate(item.item)}
-                  isDate={certificates.length > 0}
-                  onBuy={onBuyRishe}
-                  onRevoke={() => onRevoke(CertificateTypeEnum.rishe, item.item)}
-                  onInfo={onRisheInfo}
-                  price={risheCost}
-                  onInquiry={onInquiry}
-                  showCertificate={showCertificate}
-                />
-                <PasswordModal show={showPasswordModal} onInquiry={(password)=>handleInquiry(item.item.certificate,password)} loading={loading} onClose={()=>{setShowPasswordModal(false)}} />
-              </>
+            <>
+              <CertificateDataCard
+                isBought={certificates.length > 0}
+                title={item.item.cn}
+                state="شما یک گواهی فعال با مشخصات بالا دارید"
+                dateText={() => getCertDate(item.item)}
+                isDate={certificates.length > 0}
+                onBuy={onBuyRishe}
+                onRevoke={() => onRevoke(CertificateTypeEnum.rishe, item.item)}
+                onInfo={onRisheInfo}
+                price={risheCost}
+                onInquiry={onInquiry}
+                showCertificate={showCertificate}
+              />
+              <PasswordModal
+                show={showPasswordModal}
+                onInquiry={password =>
+                  handleInquiry(item.item.certificate, password)
+                }
+                loading={loading}
+                onClose={() => {
+                  setShowPasswordModal(false);
+                }}
+              />
+            </>
           )}
         />
-
-
 
         {/*  todo: commit namad for main release... */}
 
