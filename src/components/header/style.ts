@@ -26,7 +26,6 @@ export default StyleSheet.create({
   },
   buyHistoryText: {
     fontSize: 16,
-    fontWeight: 'bold',
     fontFamily: 'YekanBakh-Bold',
     color: '#253858',
     marginRight: 'auto',

@@ -10,7 +10,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Alert, Text, View } from 'react-native';
+import {Alert, Text, View} from 'react-native';
 import RNFS from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 import {
@@ -33,24 +33,24 @@ import toastAndroid from '../../components/toastAndroid';
 import * as Toast from '../../components/toastNotification/utils';
 import * as keyStorage from '../../constants/keyStorage';
 import * as routesName from '../../constants/routesName';
-import { GlobalContext } from '../../context';
-import { GlobalAction } from '../../context/actions';
-import { getAsyncStorage, setAsyncStorage } from '../../helpers/asyncStorage';
-import { toPersianDigits } from '../../helpers/convertNumber';
-import { getPersianDate } from '../../helpers/date';
+import {GlobalContext} from '../../context';
+import {GlobalAction} from '../../context/actions';
+import {getAsyncStorage, setAsyncStorage} from '../../helpers/asyncStorage';
+import {toPersianDigits} from '../../helpers/convertNumber';
+import {getPersianDate} from '../../helpers/date';
 import debugLogger from '../../helpers/debugLogger';
 import decryptFile from '../../helpers/decryptFile';
-import { getCurRouteName } from '../../helpers/getActiveRouteState';
+import {getCurRouteName} from '../../helpers/getActiveRouteState';
 import saveSignToFile from '../../helpers/saveSignToFile';
-import { deniedPermissionAlert } from '../../helpers/utils';
-import { getNamadCertificateDetails } from '../../modules/certificate/namadCertificate';
-import { getRisheCertificateDetails } from '../../modules/certificate/rishe';
+import {deniedPermissionAlert} from '../../helpers/utils';
+import {getNamadCertificateDetails} from '../../modules/certificate/namadCertificate';
+import {getRisheCertificateDetails} from '../../modules/certificate/rishe';
 import getSignerFullName from '../../modules/dataNormalizers/getSignerFullName';
 import loadContract from '../../modules/dataNormalizers/loadContract';
-import { getDownloadFilePath } from '../../modules/document/constant';
-import { DocumentActionsUtils } from '../../modules/document/documentActionsUtils';
+import {getDownloadFilePath} from '../../modules/document/constant';
+import {DocumentActionsUtils} from '../../modules/document/documentActionsUtils';
 import fileDownloader from '../../modules/fileDownloader';
-import { Logger } from '../../modules/log/logger';
+import {Logger} from '../../modules/log/logger';
 import getStoragePermission from '../../modules/permissions/storage/getStoragePermission';
 import CheckSignOrRejectButtons from './components/checkSignOrRejectButtons';
 import ConfirmModal from './components/confirmModal';
@@ -591,12 +591,18 @@ const Index = props => {
     }
   };
 
-  const signByRootCertificateHandler = async password => {
+  const signByRootCertificateHandler = async (
+    password,
+    fileNotExistCallback,
+  ) => {
     try {
       setSignContractLoading(true);
-      await ContractUtilsInstance.signByRishe(password, "");
+      await ContractUtilsInstance.signByRishe(
+        password,
+        '',
+        fileNotExistCallback,
+      );
       await signedCallback();
-      ;
       setSignContractLoading(false);
     } catch (error) {
       debugLogger('error in signByRootCertificateHandler error: ', error);
@@ -1124,13 +1130,12 @@ const Index = props => {
     }
   };
 
-  const onSignHandler = async () => {
+  const onSignHandler = async fileNotExistCallback => {
     try {
       setCheckSignCertificatesLoading(true);
       if (isNamadForced) {
         Toast.showToast('danger', '', 'درحال حاضر این سند پشتیبانی نمی شود! ');
         setCheckSignCertificatesLoading(false);
-        return;
         // todo: commit namad for main release...
         // const certificate = await checkNamadCertificateExist();
         // if (!certificate) {
@@ -1143,22 +1148,22 @@ const Index = props => {
         //   }
         // }
       } else if (isRisheForced) {
-        const certificate = await checkRisheCertificateExist()
-      //   if (!certificate) {
-      //     if (!userInfo?.asBusiness) {
-      //       setCheckSignCertificatesLoading(false);
+        const certificate = await checkRisheCertificateExist();
+        //   if (!certificate) {
+        //     if (!userInfo?.asBusiness) {
+        //       setCheckSignCertificatesLoading(false);
 
-      //       return navigate(routesName.CERTIFICATE, {
-      //         screen: routesName.RISHE_CERTIFICATE_REQUEST_PAYMENT,
-      //       });
-      //     }
-      //   }
+        //       return navigate(routesName.CERTIFICATE, {
+        //         screen: routesName.RISHE_CERTIFICATE_REQUEST_PAYMENT,
+        //       });
+        //     }
+        //   }
       }
 
       setCheckSignCertificatesLoading(false);
       navigate(routesName.CONTRACT_SIGN, {
-        onSignByRootCertificate: password =>
-          signByRootCertificateHandler(password),
+        onSignByRootCertificate: (password, fileNotExistCallback) =>
+          signByRootCertificateHandler(password, fileNotExistCallback),
         onSignByNamadCertificate: password =>
           signByNamadCertificateHandler(password),
         onSign: () => signContractHandler(),

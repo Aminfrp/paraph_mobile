@@ -38,6 +38,7 @@ import {
   revokeByCertificate,
 } from './service';
 import debugLogger from '../../../../helpers/debugLogger';
+import {Alert} from 'react-native';
 
 const certificateType: ValueOf<CertificateTypeEnum> = CertificateTypeEnum.rishe;
 
@@ -121,13 +122,21 @@ export const revoke = async (certificate: string) => {
   }
 };
 
-export const sign = async (password: string, hash: string, ssoID: number) => {
+export const sign = async (
+  password: string,
+  hash: string,
+  ssoID: number,
+  fileNotExistCallback?: () => {},
+) => {
   try {
     const certificateEncryptedContent = await readCertificateFile(
       certificateType,
     );
 
-    if (!certificateEncryptedContent) return Promise.reject('گواهی یافت نشد');
+    if (!certificateEncryptedContent) {
+      fileNotExistCallback && fileNotExistCallback();
+      return Promise.reject('گواهی یافت نشد');
+    }
     const certificate = await decryptCertificateData(
       ssoID,
       password,
@@ -367,22 +376,15 @@ export const compareCertificateWithFile = async (
 ) => {
   try {
     const certificateFile = await certificateFileData();
-    debugger;
     if (!certificateFile) return false;
     if (certificateFile) {
-      debugger;
       const ssoID = await getLoggedInUserSSOID();
-      debugger;
-
       const decryptedCertificate = await decryptCertificateData(
         ssoID,
         password,
         certificateFile,
       );
-      debugger;
-
       if (decryptedCertificate === certificate) {
-        debugger;
         return Promise.resolve(true);
       }
     }

@@ -14,6 +14,7 @@ import {getCurRouteName} from '../../../helpers/getActiveRouteState';
 import CertificateRules from '../components/certificateRules';
 import GradientBorderMessage from '../components/gradientBorderMessage';
 import styles from '../style';
+import CertificateExistErrorModal from '../../certificates/components/certificateExistErrorModal/CertificateExistErrorModal';
 
 const Index = props => {
   const {
@@ -35,6 +36,7 @@ const Index = props => {
   const [passwordError, setPasswordError] = useState(null);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [certExistModal, setCertExistModal] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -77,12 +79,12 @@ const Index = props => {
           if (certificateType === 'namad') {
             await onSignByNamadCertificate(password);
           } else if (certificateType === 'rishe') {
-            ;
-            await onSignByRootCertificate(password);
+            await onSignByRootCertificate(password, () => {
+              setCertExistModal(true);
+            });
           }
         }
       } else {
-        ;
         await onSign();
       }
 
@@ -112,12 +114,12 @@ const Index = props => {
           textAlign: 'center',
           fontSize: 14,
         }}>
-         اینجانب
+        اینجانب
         <Text
           style={{
             fontSize: 18,
           }}>
-          {signerName}  توضیحات سند
+          {signerName} توضیحات سند
         </Text>
         را به دقت مطالعه کرده و در تاریخ
         <Text
@@ -206,6 +208,10 @@ const Index = props => {
           />
         </View>
       </View>
+      <CertificateExistErrorModal
+        show={certExistModal}
+        onClose={() => setCertExistModal(false)}
+      />
     </Container>
   );
 };

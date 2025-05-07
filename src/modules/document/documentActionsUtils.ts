@@ -31,7 +31,11 @@ export class DocumentActionsUtils extends DocumentUtils {
     return getDownloadFilePath(this.fileName + '-signed');
   }
 
-  private async generateRisheSignature(password: string, dataForSign: string) {
+  private async generateRisheSignature(
+    password: string,
+    dataForSign: string,
+    fileNotExistCallback?: () => {},
+  ) {
     try {
       const ssoID: number = await getLoggedInUserSSOID();
       if (ssoID) {
@@ -39,6 +43,7 @@ export class DocumentActionsUtils extends DocumentUtils {
           password,
           dataForSign,
           ssoID,
+          fileNotExistCallback,
         );
         return Promise.resolve(signData);
       }
@@ -282,7 +287,11 @@ export class DocumentActionsUtils extends DocumentUtils {
     }
   }
 
-  public async signByRishe(password: string, signerInfo: string) {
+  public async signByRishe(
+    password: string,
+    signerInfo: string,
+    fileNotExistCallback?: () => {},
+  ) {
     try {
       const certType: string = 'rishe';
       const isValid = await this.isReadyForSign();
@@ -292,6 +301,7 @@ export class DocumentActionsUtils extends DocumentUtils {
         const signData = await this.generateRisheSignature(
           password,
           dataForSign,
+          fileNotExistCallback,
         );
         if (signData) {
           await this.callSignByCertificateService(
