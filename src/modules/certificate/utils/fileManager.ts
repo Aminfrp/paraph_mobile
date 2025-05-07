@@ -65,6 +65,9 @@ export const readDecodedPairsFile = async (
       );
 
       const contentFile = decode(decrypted.data);
+      if (!contentFile) {
+        return Promise.resolve(null);
+      }
       pairs = await JSON.parse(ab2str(contentFile));
       return Promise.resolve(pairs);
     }

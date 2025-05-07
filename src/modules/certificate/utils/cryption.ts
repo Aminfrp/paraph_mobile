@@ -36,7 +36,7 @@ export const generateInitialVector = async (
   ssoID: number,
 ) => {
   const userPassHashString = await buildHash(str2base64(userPassInput));
-  const ssoIdHashString = await buildHash(str2base64(ssoID));
+  const ssoIdHashString = await buildHash(str2base64(ssoID.toString()));
   const deviceId = await getDeviceUniqueId();
   return deviceId + userPassHashString + '-' + ssoIdHashString;
 };
@@ -113,7 +113,7 @@ export const decryptCertificateData = async (
 
     const certificateDecodedData = await decode(certificateContent.data);
     Logger.debugLogger('certiiiii', certificateDecodedData);
-
+    if (!certificateDecodedData) return;
     const certificate = await JSON.parse(ab2str(certificateDecodedData));
     return Promise.resolve(certificate);
   } catch (error) {
