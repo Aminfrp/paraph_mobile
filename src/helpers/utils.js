@@ -71,3 +71,39 @@ export const contractExpiredAlert = () => {
     },
   );
 };
+
+export const getContractStatusBadgeTypeColor = (status: string): string => {
+  switch (status) {
+    case 'SUBMITTED': {
+      return '#FFC107';
+    }
+    case 'DOWNLOADED': {
+      return '#FFC107';
+    }
+    case 'NOT_SIGNED': {
+      return '#DC3545';
+    }
+    case 'OPENED': {
+      return '#007BFF';
+    }
+    case 'FAIL_TO_FETCH': {
+      return '#17A2B8';
+    }
+    case 'SIGNED': {
+      return '#28A745';
+    }
+    case 'REJECTED': {
+      return '#DC3545';
+    }
+    case 'GATEWAY_SIGNED': {
+      return '#28A745';
+    }
+    case 'WAIT_FOR_SIGN_ON_GATEWAY': {
+      return '#FFC107';
+    }
+
+    default: {
+      return '#FFC107';
+    }
+  }
+};

@@ -27,15 +27,15 @@ const Index: React.FC<PropsModel> = props => {
         </Text>
       </View>
       <View style={styles.noCertificateBoughtCertificateBtnGroup}>
-        <View style={styles.noCertificateBoughtCertificateBtnWrapper}>
-          <Button
-            title="اطلاعات بیشتر"
-            type="white-outline"
-            onPress={onMoreDetails}
-            loading={false}
-            disabled={false}
-          />
-        </View>
+        {/*<View style={styles.noCertificateBoughtCertificateBtnWrapper}>*/}
+        {/*  <Button*/}
+        {/*    title="اطلاعات بیشتر"*/}
+        {/*    type="white-outline"*/}
+        {/*    onPress={onMoreDetails}*/}
+        {/*    loading={false}*/}
+        {/*    disabled={false}*/}
+        {/*  />*/}
+        {/*</View>*/}
         <View style={styles.noCertificateBoughtCertificateBtnWrapper}>
           <Button
             title="خرید گواهی امضا"
