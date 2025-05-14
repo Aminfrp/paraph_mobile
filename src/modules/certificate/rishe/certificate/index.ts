@@ -68,11 +68,8 @@ export const generate = async (
       return;
     }
 
-    const certificate = await generateCertificateByCSR(
-      pairs,
-      postData,
-      ssoID.toString(),
-    );
+    await setAsyncStorage('text', ssoID + '-password', userPassInput);
+    const certificate = await generateCertificateByCSR(pairs, postData);
 
     if (certificate) {
       const certificateFileObjectData = {
@@ -80,8 +77,6 @@ export const generate = async (
         keyId,
         pairs,
       };
-
-      await setAsyncStorage('text', ssoID + '-password', userPassInput);
 
       const encryptedCertificateData = await encryptCertificateData(
         ssoID,
@@ -144,19 +139,16 @@ export const sign = async (
       certificateType,
     );
 
-    debugger;
-
     if (!certificateEncryptedContent) {
       fileNotExistCallback && fileNotExistCallback();
       return Promise.reject('گواهی یافت نشد');
     }
-    debugger;
+
     const certificateFileData = await decryptCertificateData(
       ssoID,
       password,
       certificateEncryptedContent,
     );
-    debugger;
 
     Logger.debugLogger('certificate', certificateFileData);
 
@@ -164,10 +156,8 @@ export const sign = async (
       certificateFileData.pairs.private,
       hash,
     );
-    debugger;
 
     const userCertificate = await getByKeyId(certificateFileData.keyId);
-    debugger;
 
     if (userCertificate === null) {
       fileNotExistCallback && fileNotExistCallback();
@@ -261,7 +251,6 @@ const certificateInvoiceCreatedStatus = async () => {
 const generateCertificateByCSR = async (
   pairs: PairsModel,
   params: RisheGenerateInputModel,
-  ssoId: string,
 ) => {
   try {
     const subjectData = await getSubject({...params});
@@ -282,6 +271,8 @@ const generateCertificateByCSR = async (
       keyId: params.keyId,
     });
     let certificate = '';
+    const ssoId = await getLoggedInUserSSOID();
+
     await setAsyncStorage(
       'text',
       ssoId + '-requestId',
@@ -289,6 +280,7 @@ const generateCertificateByCSR = async (
     );
     await setAsyncStorage('text', ssoId + '-keyId', params.keyId);
     await setAsyncStorage('object', ssoId + '-pairs', pairs);
+
     while (true) {
       const response = await risheInquiry(
         params.keyId,
@@ -297,6 +289,7 @@ const generateCertificateByCSR = async (
       if (response.data.certificate !== null) {
         certificate = response.data.certificate;
         await removeAsyncStorage(ssoId + '-keyId');
+        await removeAsyncStorage(ssoId + '-requestId');
         await removeAsyncStorage(ssoId + '-pairs');
         await removeAsyncStorage(ssoId + '-password');
         break;

@@ -1,6 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, StatusBar} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StatusBar,
+  Text,
+  View,
+} from 'react-native';
 import Header from '../../components/header';
 import Loading from '../../components/loading';
 import * as routesName from '../../constants/routesName';
@@ -15,6 +21,19 @@ import Certificates from './components/certificates';
 import NoCertificateBought from './components/noCertificateBought';
 import RevokeModal from './components/revokeModal';
 import styles from './style';
+import risheInquiry from '../../apis/services/risheInquiry.ts';
+import getLoggedInUserSSOID from '../../helpers/getLoggedInUserSSOID.ts';
+import {
+  getAsyncStorage,
+  removeAsyncStorage,
+} from '../../helpers/asyncStorage.js';
+import sleep from '../../helpers/sleep';
+import {encryptCertificateData} from '../../modules/certificate/utils/cryption.ts';
+import {writeCertificateFile} from '../../modules/certificate/utils/fileManager.ts';
+import certificateLogger from '../../modules/certificate/utils/certificateLogger.ts';
+import Modal from '../../components/modal';
+import colors from '../../assets/theme/colors.ts';
+import * as Toast from '../../components/toastNotification/utils';
 
 const Index: React.FC = props => {
   const [isRisheCertificateExist, setIsRisheCertificateExist] =
@@ -32,6 +51,7 @@ const Index: React.FC = props => {
     type: string | null;
   }>({show: false, type: null});
   const [revokeLoading, setRevokeLoading] = useState<boolean>(false);
+  const [showInquiryModal, setShowInquiryModal] = useState<boolean>(false);
   const [certificateListLoading, setCertificateListLoading] =
     useState<boolean>(false);
   const [certificates, setCertificates] = useState<CertificateModel[]>([]);
@@ -93,9 +113,71 @@ const Index: React.FC = props => {
     }
   };
 
+  const checkRequestIdExist = async () => {
+    try {
+      const ssoId = await getLoggedInUserSSOID();
+      const keyId = await getAsyncStorage('text', ssoId + '-keyId');
+      const requestId = await getAsyncStorage('text', ssoId + '-requestId');
+      const password = await getAsyncStorage('text', ssoId + '-password');
+      const pairs = await getAsyncStorage('object', ssoId + '-pairs');
+      let certificate = '';
+
+      if (!requestId) return;
+      setShowInquiryModal(true);
+      while (true) {
+        const response = await risheInquiry(keyId, requestId);
+        if (response.data.certificate !== null) {
+          certificate = response.data.certificate;
+          await removeAsyncStorage(ssoId + '-keyId');
+          await removeAsyncStorage(ssoId + '-pairs');
+          await removeAsyncStorage(ssoId + '-password');
+          break;
+        }
+        await sleep(30000);
+      }
+      if (certificate) {
+        const certificateFileObjectData = {
+          certificate,
+          keyId,
+          pairs,
+        };
+
+        const encryptedCertificateData = await encryptCertificateData(
+          ssoId,
+          password,
+          certificateFileObjectData,
+        );
+
+        await writeCertificateFile(
+          CertificateTypeEnum.rishe,
+          encryptedCertificateData.data,
+        );
+
+        await certificateLogger(
+          'info',
+          'certificate generated and saved in client, invoice status is file-created',
+        );
+
+        Toast.showToast(
+          'success',
+          'صدور گواهی',
+          'گواهی امضا با موفقیت ساخته و ذخیره شد.',
+        );
+        setShowInquiryModal(false);
+      }
+    } catch (e) {
+      setShowInquiryModal(false);
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     certificateList();
   }, [certificates.length]);
+
+  useEffect(() => {
+    checkRequestIdExist();
+  }, []);
 
   if (certificateListLoading) {
     return (
@@ -143,8 +225,29 @@ const Index: React.FC = props => {
           }
         />
       </ScrollView>
+      <Modal
+        visible={showInquiryModal}
+        onRequestClose={() => {}}
+        title={'صدور گواهی ریشه'}>
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontFamily: 'YekanBakh-Bold'}}>
+            گواهی ریشه در حال صدور می باشد لطفا منتظر بمانید.
+          </Text>
+          <ActivityIndicator
+            size="large"
+            color={colors.primary.success}
+            style={{padding: 20}}
+          />
+        </View>
+      </Modal>
     </>
   );
 };
 
+// @ts-ignore
 export default Index;

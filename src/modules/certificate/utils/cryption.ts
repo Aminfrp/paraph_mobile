@@ -2,6 +2,7 @@ import {
   getAppServerEcdhPublicKeyService,
   getPodEcdhKeyPairService,
   getPodEcdhPublicKeyService,
+  getSecretKeyByContractIdService,
 } from '../../../apis';
 import {getDeviceUniqueId} from '../../../helpers/deviceInfo';
 import {decode} from '../../converter/bufferConverter';
@@ -91,24 +92,27 @@ export const decryptCertificateData = async (
   decryptedContent: string,
 ) => {
   try {
-    const secret = await generateSecretByKeyPairs(ssoID);
-    debugger;
+    // const secret = await generateSecretByKeyPairs(ssoID);
+    const response = await getSecretKeyByContractIdService({
+      ssoIdList: [ssoID],
+      contractId: null,
+      hash: password,
+    });
+    const data = response && response.data;
+    const secret = data && data[0].secretKey;
 
     const initialVector = await generateInitialVector(password, ssoID);
-    debugger;
 
     const {secretKey, iv} = getBase64DecryptedCertificateObject(
       secret,
       initialVector,
     );
-    debugger;
 
     const certificateContent = await NativeEncryptionModule.decryptWithAES(
       secretKey,
       iv,
       decryptedContent,
     );
-    debugger;
 
     console.log('cert Content', certificateContent);
 
@@ -116,11 +120,9 @@ export const decryptCertificateData = async (
       await certificateLogger('error', 'error in decrypt file');
       return Promise.reject('خطا در رمزگشایی گواهی');
     }
-    debugger;
 
     const certificateDecodedData = await decode(certificateContent.data);
     Logger.debugLogger('certiiiii', certificateDecodedData);
-    debugger;
 
     if (!certificateDecodedData) return;
     const certificate = await JSON.parse(ab2str(certificateDecodedData));
@@ -147,8 +149,14 @@ export const encryptCertificateData = async <T>(
   certificate: T,
 ) => {
   try {
-    const secret = await generateSecretByKeyPairs(ssoID);
-
+    // const secret = await generateSecretByKeyPairs(ssoID);
+    const response = await getSecretKeyByContractIdService({
+      ssoIdList: [ssoID],
+      contractId: null,
+      hash: userPassInput,
+    });
+    const data = response && response.data;
+    const secret = data && data[0].secretKey;
     const initialVector = await generateInitialVector(userPassInput, ssoID);
 
     const {secretKey, iv, encryptingData} =

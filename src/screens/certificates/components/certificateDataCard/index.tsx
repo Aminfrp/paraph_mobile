@@ -80,7 +80,7 @@ const Index: React.FC<PropsModel> = props => {
         </View>
       )}
 
-      <View style={styles.certificateDataCardDivider} />
+      {isCertificateExist && <View style={styles.certificateDataCardDivider} />}
       <View style={styles.certificateDataCardFooter}>
         <TouchableOpacity onPress={onInfo}>
           <Image
@@ -100,13 +100,15 @@ const Index: React.FC<PropsModel> = props => {
               disabled={false}
             />
           ) : (
-            <Button
-              title="ابطال گواهی"
-              type="danger"
-              onPress={onRevoke}
-              loading={false}
-              disabled={false}
-            />
+            isCertificateExist && (
+              <Button
+                title="ابطال گواهی"
+                type="danger"
+                onPress={onRevoke}
+                loading={false}
+                disabled={false}
+              />
+            )
           )}
         </View>
       </View>
