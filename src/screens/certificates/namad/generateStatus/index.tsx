@@ -74,7 +74,7 @@ const Index: React.FC = () => {
           <Text style={[styles.text, {textAlign: 'center'}]}>
             {status
               ? 'جزییات مربوط به گواهی امضای شما در بخش گواهی های امضا دیجیتال در دسترس است'
-              : 'دکمه تلاش مجدد را فشار داده و مجددا تلاش کنید یا دقایقی دیگر از بخش گواهی امضا فرایند را تکمیل کنید'}
+              : ' پرداخت شما با موفقیت انجام شد. لطفا در ساعاتی دیگر مجددا تلاش کنید'}
           </Text>
         </View>
         <CertificateGenerateStatusCard
@@ -102,15 +102,8 @@ const Index: React.FC = () => {
           ) : (
             <>
               <Button
-                title="تلاش مجدد"
-                type="success"
-                onPress={onRetry}
-                loading={false}
-                disabled={false}
-              />
-              <Button
                 title="بازگشت به صفحه اصلی"
-                type="transparent-outline"
+                type="success"
                 onPress={onBack}
                 loading={false}
                 disabled={false}

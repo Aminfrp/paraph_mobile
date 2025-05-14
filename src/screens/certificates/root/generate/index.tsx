@@ -1,6 +1,12 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {ScrollView, StatusBar, Text} from 'react-native';
+import {
+  ScrollView,
+  StatusBar,
+  Text,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import Button from '../../../../components/button';
 import Header from '../../../../components/header';
 import * as routesName from '../../../../constants/routesName';
@@ -14,6 +20,8 @@ import ImportantPointAboutPasswordCard from '../../components/importantPointAbou
 import UserDataForm from '../../components/userDataForm';
 import styles from '../style';
 import {FieldErrors} from './fieldErrros.model';
+import Modal from '../../../../components/modal';
+import colors from '../../../../assets/theme/colors';
 
 const Index: React.FC = () => {
   const {navigate} = useNavigation();
@@ -216,6 +224,26 @@ const Index: React.FC = () => {
             />
           </>
         )}
+        <Modal
+          visible={generateLoading}
+          onRequestClose={() => {}}
+          title={'صدور گواهی ریشه'}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{fontFamily: 'YekanBakh-Bold'}}>
+              گواهی ریشه در حال صدور می باشد لطفا منتظر بمانید.
+            </Text>
+            <ActivityIndicator
+              size="large"
+              color={colors.primary.success}
+              style={{padding: 20}}
+            />
+          </View>
+        </Modal>
       </ScrollView>
     </>
   );

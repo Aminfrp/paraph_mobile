@@ -29,7 +29,6 @@ const Index: React.FC = () => {
       if (invoice) {
         const certificateType =
           invoice?.metadata?.clientMetadata[0]?.certificateType;
-
         if (certificateType === CertificateTypeEnum.namad) {
           // @ts-ignore
           navigate(NAMAD_CERTIFICATE_GENERATE, {
@@ -52,7 +51,9 @@ const Index: React.FC = () => {
   const getInvoiceByKeyId = async (keyId: string): Promise<InvoiceModel> => {
     try {
       const now = new Date();
-      const toDate = now.toISOString().slice(0, 19).replace('T', ' ');
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+      const toDate = tomorrow.toISOString().slice(0, 19).replace('T', ' ');
       const fromDate = `${now.getFullYear() - 1}/01/01 00:00:00`;
 
       const postData: GetInvoiceListInputModel = {

@@ -39,6 +39,8 @@ import {
 } from './service';
 import debugLogger from '../../../../helpers/debugLogger';
 import {Alert} from 'react-native';
+import {setAsyncStorage} from '../../../../helpers/asyncStorage';
+import ssoId from '../../../../apis/services/ssoId.ts';
 
 const certificateType: ValueOf<CertificateTypeEnum> = CertificateTypeEnum.rishe;
 
@@ -63,7 +65,11 @@ export const generate = async (
       return;
     }
 
-    const certificate = await generateCertificateByCSR(pairs, postData);
+    const certificate = await generateCertificateByCSR(
+      pairs,
+      postData,
+      ssoID.toString(),
+    );
 
     if (certificate) {
       const certificateFileObjectData = {
@@ -71,6 +77,8 @@ export const generate = async (
         keyId,
         pairs,
       };
+
+      await setAsyncStorage('text', ssoID + '-password', userPassInput);
 
       const encryptedCertificateData = await encryptCertificateData(
         ssoID,
@@ -133,22 +141,34 @@ export const sign = async (
       certificateType,
     );
 
+    debugger;
+
     if (!certificateEncryptedContent) {
       fileNotExistCallback && fileNotExistCallback();
       return Promise.reject('گواهی یافت نشد');
     }
-    const certificate = await decryptCertificateData(
+    debugger;
+    const certificateFileData = await decryptCertificateData(
       ssoID,
       password,
       certificateEncryptedContent,
     );
+    debugger;
 
-    Logger.debugLogger('certificate', certificate);
+    Logger.debugLogger('certificate', certificateFileData);
 
     const signature = await NativeEncryptionModule.createSignatureRSA(
-      certificate.pairs.private,
+      certificateFileData.pairs.private,
       hash,
     );
+    debugger;
+
+    const userCertificate = await getByKeyId(certificateFileData.keyId);
+    debugger;
+
+    if (userCertificate === null) {
+      fileNotExistCallback && fileNotExistCallback();
+    }
 
     await certificateLogger(
       'info',
@@ -157,9 +177,9 @@ export const sign = async (
 
     return Promise.resolve({
       signature,
-      pairs: certificate.pairs,
-      keyId: certificate.keyId,
-      certificate,
+      pairs: certificateFileData.pairs,
+      keyId: certificateFileData.keyId,
+      certificate: certificateFileData,
     });
   } catch (error) {
     await certificateLogger('error', error);
@@ -214,34 +234,6 @@ export const getCertificateList = async () => {
   }
 };
 
-// const isPasswordValid = async (password: string) => {
-//   try {
-//
-//     const certificateEncryptedContent: string | undefined = await readCertificateFile(certificateType);
-//
-//
-//     if (certificateEncryptedContent) {
-//       const ssoID = await getLoggedInUserSSOID();
-//
-//       const certificate = await decryptCertificateData(
-//         ssoID,
-//         password,
-//         certificateEncryptedContent,
-//       );
-//
-//       if (certificate) {
-//         return Promise.resolve(true);
-//       }
-//     }
-//
-//     return Promise.resolve(false);
-//   } catch (error) {
-//     await certificateLogger('error', error);
-//     Logger.debugLogger('error in isPasswordValid: ', error);
-//     return Promise.reject({error_description: 'رمز وارد شده مطابقت ندارد'});
-//   }
-// };
-
 const certificateInvoiceCreatedStatus = async () => {
   try {
     const invoices = await getCertificateInvoices(certificateType);
@@ -266,6 +258,7 @@ const certificateInvoiceCreatedStatus = async () => {
 const generateCertificateByCSR = async (
   pairs: PairsModel,
   params: RisheGenerateInputModel,
+  ssoId: string,
 ) => {
   try {
     const subjectData = await getSubject({...params});
@@ -286,7 +279,14 @@ const generateCertificateByCSR = async (
       keyId: params.keyId,
     });
     let certificate = '';
-    for (let index = 0; index < 20; index++) {
+    await setAsyncStorage(
+      'text',
+      ssoId + '-requestId',
+      certificateResponse.body.requestId,
+    );
+    await setAsyncStorage('text', ssoId + '-keyId', params.keyId);
+    await setAsyncStorage('object', ssoId + '-pairs', pairs);
+    while (true) {
       const response = await risheInquiry(
         params.keyId,
         certificateResponse.body.requestId,
@@ -295,7 +295,7 @@ const generateCertificateByCSR = async (
         certificate = response.data.certificate;
         break;
       }
-      await sleep(10000);
+      await sleep(30000);
     }
     return Promise.resolve(certificate);
   } catch (error) {
@@ -365,31 +365,6 @@ export const certificateFileData = async () => {
     return await readCertificateFile(certificateType);
   } catch (error) {
     Logger.debugLogger('error in readCertificate file: ', error);
-    return Promise.reject(error);
-  }
-};
-
-// check certificate file and rishe certificate is equal
-export const compareCertificateWithFile = async (
-  certificate: string,
-  password: string,
-) => {
-  try {
-    const certificateFile = await certificateFileData();
-    if (!certificateFile) return false;
-    if (certificateFile) {
-      const ssoID = await getLoggedInUserSSOID();
-      const decryptedCertificate = await decryptCertificateData(
-        ssoID,
-        password,
-        certificateFile,
-      );
-      if (decryptedCertificate === certificate) {
-        return Promise.resolve(true);
-      }
-    }
-  } catch (error) {
-    debugLogger('error in compareCertificateWithFile: ', error);
     return Promise.reject(error);
   }
 };
