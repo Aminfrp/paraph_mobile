@@ -16,8 +16,6 @@ import {ProductInvoice} from '../../../../model/productInvoice.model';
 import numberSeparator from '../../../../modules/converter/numberSeparator';
 import styles from '../../style';
 import CertificateDataCard from '../certificateDataCard';
-import PasswordModal from '../passwordModal/PasswordModal.tsx';
-import {compareCertificateWithFile} from '../../../../modules/certificate/rishe/certificate';
 type PropsModel = {
   onInfo: (show: boolean, type: string) => void;
   onRevoke: (type: string, certificate: CertificateModel) => void;
@@ -55,9 +53,9 @@ const Index: React.FC<PropsModel> = props => {
 
   const getCertDate = (item: CertificateModel) => {
     const cert = forge.pki.certificateFromPem(item.certificate);
-    return `تاریخ انقضا : ${new Date(
-      cert.validity.notBefore,
-    ).toLocaleDateString('fa-IR')}`;
+    return `تاریخ انقضا : ${new Date(cert.validity.notAfter).toLocaleDateString(
+      'fa-IR',
+    )}`;
   };
 
   return (

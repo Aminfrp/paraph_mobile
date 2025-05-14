@@ -36,10 +36,10 @@ export default async (secretKey, file, iv, show = true) => {
 
 const openPdf = async (secretKey, file, Base64IV, show) => {
   try {
-    const fileUri = await writeFile(secretKey, file, Base64IV).then(
-      res =>
-        show && RNFetchBlob.android.actionViewIntent(res, 'application/pdf'),
-    );
+    const fileUri = await writeFile(secretKey, file, Base64IV);
+    if (show) {
+      RNFetchBlob.android.actionViewIntent(fileUri, 'application/pdf');
+    }
 
     // if (Platform.OS === 'android') {
     //   RNFetchBlob.android.actionViewIntent(res.path(), mimeType || 'application/pdf');

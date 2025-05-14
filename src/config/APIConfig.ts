@@ -1,4 +1,4 @@
-const isDevMode: boolean = true;
+const isDevMode: boolean = false;
 
 const CONTRACT_IV = 'fZNZP__$__cONTRACT__$__iV__Key';
 
@@ -91,8 +91,7 @@ if (isDevMode) {
   USER_NAME = PARAPH_USER_NAME;
   BUSINESS_CODE = PARAPH_BUSINESS_CODE;
   AUTHORIZE_SCOPE =
-    'profile login profile_write legal_nationalcode_write legal_nationalcode profile_nickname_write profile_nickname storage legal';
-
+    'profile login profile_write legal_nationalcode_write legal_birthdate storage_write legal_nationalcode profile_nickname_write profile_nickname storage legal key key_write key_sign certificate_write certificate';
   // server_url
   // todo: change main server for test namad certificate release(test)...
   SERVER_URL = 'https://paraph.pod.ir/';

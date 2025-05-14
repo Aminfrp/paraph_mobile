@@ -88,6 +88,20 @@ android {
         multiDexEnabled true
     }
 
+//    flavorDimensions "version"
+//    productFlavors {
+//        production {
+//            dimension "version"
+//            applicationId "com.paraph_mobile.app"
+//            resValue "string", "paraph_mobile", "Paraph"
+//        }
+//        staging {
+//            dimension "version"
+//            applicationId "com.paraph_mobile.app.staging"
+//            resValue "string", "paraph_mobile_sandbox", "Paraph Sandbox"
+//        }
+//    }
+
 
     signingConfigs {
         debug {

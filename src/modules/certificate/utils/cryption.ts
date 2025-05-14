@@ -92,17 +92,23 @@ export const decryptCertificateData = async (
 ) => {
   try {
     const secret = await generateSecretByKeyPairs(ssoID);
+    debugger;
+
     const initialVector = await generateInitialVector(password, ssoID);
+    debugger;
+
     const {secretKey, iv} = getBase64DecryptedCertificateObject(
       secret,
       initialVector,
     );
+    debugger;
 
     const certificateContent = await NativeEncryptionModule.decryptWithAES(
       secretKey,
       iv,
       decryptedContent,
     );
+    debugger;
 
     console.log('cert Content', certificateContent);
 
@@ -110,9 +116,12 @@ export const decryptCertificateData = async (
       await certificateLogger('error', 'error in decrypt file');
       return Promise.reject('خطا در رمزگشایی گواهی');
     }
+    debugger;
 
     const certificateDecodedData = await decode(certificateContent.data);
     Logger.debugLogger('certiiiii', certificateDecodedData);
+    debugger;
+
     if (!certificateDecodedData) return;
     const certificate = await JSON.parse(ab2str(certificateDecodedData));
     return Promise.resolve(certificate);
