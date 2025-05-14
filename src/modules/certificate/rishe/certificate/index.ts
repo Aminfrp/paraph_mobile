@@ -39,7 +39,10 @@ import {
 } from './service';
 import debugLogger from '../../../../helpers/debugLogger';
 import {Alert} from 'react-native';
-import {setAsyncStorage} from '../../../../helpers/asyncStorage';
+import {
+  removeAsyncStorage,
+  setAsyncStorage,
+} from '../../../../helpers/asyncStorage';
 import ssoId from '../../../../apis/services/ssoId.ts';
 
 const certificateType: ValueOf<CertificateTypeEnum> = CertificateTypeEnum.rishe;
@@ -293,6 +296,9 @@ const generateCertificateByCSR = async (
       );
       if (response.data.certificate !== null) {
         certificate = response.data.certificate;
+        await removeAsyncStorage(ssoId + '-keyId');
+        await removeAsyncStorage(ssoId + '-pairs');
+        await removeAsyncStorage(ssoId + '-password');
         break;
       }
       await sleep(30000);
