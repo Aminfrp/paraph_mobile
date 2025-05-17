@@ -3,13 +3,21 @@ import React, {useEffect, useState} from 'react';
 import {Image, Keyboard, StatusBar, Text, View} from 'react-native';
 
 import {getUniqueId} from 'react-native-device-info';
-import {authorizeService, handShakeService} from '../../apis';
+import {
+  authorizeService,
+  handShakeService,
+  podAuthorizeService,
+} from '../../apis';
 import AppLogoTitle from '../../components/appLogoTitle';
 import Button from '../../components/button';
 import Checkbox from '../../components/checkbox';
 import Input from '../../components/input';
 import toastAndroid from '../../components/toastAndroid';
-import {APP_VERSION_STRING, AUTHORIZE_SCOPE} from '../../config/APIConfig';
+import {
+  APP_VERSION_STRING,
+  AUTHORIZE_SCOPE,
+  CLIENT_ID,
+} from '../../config/APIConfig';
 import * as keyStorage from '../../constants/keyStorage';
 import * as routesName from '../../constants/routesName';
 import {
@@ -102,7 +110,9 @@ const Index = () => {
           const params: Partial<AuthorizeServiceInput> = {
             keyId,
             mobile,
+            businessClientId: CLIENT_ID,
             scope: AUTHORIZE_SCOPE,
+            ...(asBusiness && {loginAsUserId: businessId}),
           };
 
           onDismiss();
@@ -174,12 +184,17 @@ const Index = () => {
   const authorize = async (params: Partial<AuthorizeServiceInput>) => {
     try {
       setLoading(true);
-      const response = await authorizeService(params);
+
+      const response = await podAuthorizeService(params);
+
       if (!response.data) return;
       await setAsyncStorage('text', keyStorage.MOBILE_NUMBER, mobile);
 
       // @ts-ignore
-      await navigate(routesName.VERIFY, {loginData: response.data, asBusiness});
+      await navigate(routesName.VERIFY, {
+        loginData: response.data[0],
+        asBusiness,
+      });
       setLoading(false);
     } catch (error: any) {
       debugLogger('error in authorize: ', error);

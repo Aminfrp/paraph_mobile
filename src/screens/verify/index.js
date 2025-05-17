@@ -3,10 +3,10 @@ import React, {useContext, useState} from 'react';
 import {Image, ScrollView, StatusBar, View} from 'react-native';
 
 import {
-  authorizeService,
   checkRootCertificateServicesStabilityService,
   getPublicKeyService,
   getUserProfileService,
+  podAuthorizeService,
   ssoIdService,
   tokenService,
   verifyService,
@@ -108,7 +108,8 @@ const Index = props => {
         scope: AUTHORIZE_SCOPE,
       };
 
-      const response = await authorizeService(params);
+      const response = await podAuthorizeService(params);
+
       const data = response && response.data;
       await setAuthorizeData(data);
       setUserAuthorizeLoading(false);
@@ -128,6 +129,7 @@ const Index = props => {
     try {
       setVerifyLoading(true);
       const verifyResponse = await callVerifyService(postData);
+
       if (verifyResponse) {
         await setUserTokenData(verifyResponse);
 

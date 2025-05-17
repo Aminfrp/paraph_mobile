@@ -1,4 +1,4 @@
-const isDevMode: boolean = true;
+const isDevMode: boolean = false;
 
 const CONTRACT_IV = 'fZNZP__$__cONTRACT__$__iV__Key';
 

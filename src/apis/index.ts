@@ -46,6 +46,7 @@ import rcDefineService from './services/rc-define';
 import rcGenerateService from './services/rc-generate';
 import rcGetKeysService from './services/rc-getKeys';
 import rcKeysService from './services/rc-keys';
+import podAuthorizeService from './services/podAuthoriz';
 import {
   default as rcRevokeAllService,
   default as revokeAllRisheCertificatesService,
@@ -138,4 +139,5 @@ export {
   updateStateService,
   uploadFileService,
   verifyService,
+  podAuthorizeService,
 };
