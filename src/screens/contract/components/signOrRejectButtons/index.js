@@ -123,6 +123,7 @@ const Index = props => {
     {
       title: 'رد',
       type: 'danger',
+      loading: false,
       // onPress: () => setModalType('NOT_SIGNED'),
       onPress: () => onReject(),
     },
@@ -130,6 +131,7 @@ const Index = props => {
       title: 'امضا',
       type: 'success',
       // onPress: () => setModalType('SIGNED'),
+      loading: signLoading,
       onPress: () => onSign(),
     },
   ];
@@ -191,7 +193,7 @@ const Index = props => {
                           title={item.title}
                           type={item.type}
                           onPress={item.onPress}
-                          loading={false}
+                          loading={item.loading}
                           disabled={isDocumentExpired || signLoading}
                         />
                       </View>
