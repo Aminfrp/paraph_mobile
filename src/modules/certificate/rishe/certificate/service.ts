@@ -40,7 +40,7 @@ export const getCertificates = async () => {
     const data = response && response.data;
     return data;
   } catch (error) {
-    return Promise.resolve(error);
+    return Promise.reject(error);
   }
 };
 

@@ -34,6 +34,7 @@ import certificateLogger from '../../modules/certificate/utils/certificateLogger
 import Modal from '../../components/modal';
 import colors from '../../assets/theme/colors.ts';
 import * as Toast from '../../components/toastNotification/utils';
+import Button from '../../components/button';
 
 const Index: React.FC = props => {
   const [isRisheCertificateExist, setIsRisheCertificateExist] =
@@ -56,6 +57,7 @@ const Index: React.FC = props => {
     useState<boolean>(false);
   const [certificates, setCertificates] = useState<CertificateModel[]>([]);
   const navigation = useNavigation();
+  const [certError, setCertError] = useState('');
 
   const onBuy = () =>
     navigation.navigate(routesName.RISHE_CERTIFICATE_REQUEST_PAYMENT as never);
@@ -109,6 +111,7 @@ const Index: React.FC = props => {
       setCertificates(response);
       setCertificateListLoading(false);
     } catch (error) {
+      setCertError(error.errorMessage.response.data.message);
       setCertificateListLoading(false);
     }
   };
@@ -124,17 +127,21 @@ const Index: React.FC = props => {
 
       if (!requestId) return;
       setShowInquiryModal(true);
+
       while (true) {
         const response = await risheInquiry(keyId, requestId);
         if (response.data.certificate !== null) {
           certificate = response.data.certificate;
+
           await removeAsyncStorage(ssoId + '-keyId');
+          await removeAsyncStorage(ssoId + '-requestId');
           await removeAsyncStorage(ssoId + '-pairs');
           await removeAsyncStorage(ssoId + '-password');
           break;
         }
         await sleep(30000);
       }
+
       if (certificate) {
         const certificateFileObjectData = {
           certificate,
@@ -152,6 +159,9 @@ const Index: React.FC = props => {
           CertificateTypeEnum.rishe,
           encryptedCertificateData.data,
         );
+
+        await certificateList();
+        setShowInquiryModal(false);
 
         await certificateLogger(
           'info',
@@ -194,6 +204,7 @@ const Index: React.FC = props => {
       <StatusBar />
       <Header title="گواهی امضای دیجیتال" />
       <ScrollView contentContainerStyle={styles.wrapper}>
+        {certError && <Text>{certError}</Text>}
         {certificates && !certificates.length ? (
           <NoCertificateBought onBuy={onBuy} onMoreDetails={() => {}} />
         ) : (
@@ -242,6 +253,39 @@ const Index: React.FC = props => {
             size="large"
             color={colors.primary.success}
             style={{padding: 20}}
+          />
+          <Button
+            title="انتقال به صفحه اصلی"
+            type="success"
+            onPress={() => {
+              // @ts-ignore
+              navigation.navigate(routesName.HOME, {
+                screen: routesName.HOME,
+              });
+            }}
+          />
+        </View>
+      </Modal>
+      <Modal visible={!!certError} onRequestClose={() => {}} title={certError}>
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontFamily: 'YekanBakh-Bold'}}>
+            در حال حاضر این سرویس در دسترس نمی باشد. لطفا ساعاتی دیگر مجددا تلاش
+            کنید.
+          </Text>
+          <Button
+            title="انتقال به صفحه اصلی"
+            type="danger"
+            onPress={() => {
+              // @ts-ignore
+              navigation.navigate(routesName.HOME, {
+                screen: routesName.HOME,
+              });
+            }}
           />
         </View>
       </Modal>
