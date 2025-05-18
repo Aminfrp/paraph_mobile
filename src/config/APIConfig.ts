@@ -2,8 +2,8 @@ const isDevMode: boolean = false;
 
 const CONTRACT_IV = 'fZNZP__$__cONTRACT__$__iV__Key';
 
-const APP_VERSION = 'm-3-1-1';
-const APP_VERSION_STRING = `3.1.1 ${isDevMode ? 'QC' : ''}`;
+const APP_VERSION = 'm-4-0-0';
+const APP_VERSION_STRING = `4.0.0 ${isDevMode ? 'QC' : ''}`;
 
 const WE_POD_LEVEL_UP_LINK =
   'https://levelup.wepod.ir/fa/profile/standalone-login?theme=219775&logo=QCE7RMLWI1BTVWEW&redirect_url=https:%2F%2Fparaph.me%2Fcallbackapplication';
