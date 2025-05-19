@@ -1149,15 +1149,15 @@ const Index = props => {
         // }
       } else if (isRisheForced) {
         const certificate = await checkRisheCertificateExist();
-        //   if (!certificate) {
-        //     if (!userInfo?.asBusiness) {
-        //       setCheckSignCertificatesLoading(false);
+        if (!certificate) {
+          if (!userInfo?.asBusiness) {
+            setCheckSignCertificatesLoading(false);
 
-        //       return navigate(routesName.CERTIFICATE, {
-        //         screen: routesName.RISHE_CERTIFICATE_REQUEST_PAYMENT,
-        //       });
-        //     }
-        //   }
+            return navigate(routesName.CERTIFICATE, {
+              screen: routesName.CERTIFICATE,
+            });
+          }
+        }
       }
 
       setCheckSignCertificatesLoading(false);
