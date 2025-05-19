@@ -204,7 +204,6 @@ const Index: React.FC = props => {
       <StatusBar />
       <Header title="گواهی امضای دیجیتال" />
       <ScrollView contentContainerStyle={styles.wrapper}>
-        {certError && <Text>{certError}</Text>}
         {certificates && !certificates.length ? (
           <NoCertificateBought onBuy={onBuy} onMoreDetails={() => {}} />
         ) : (
@@ -266,7 +265,10 @@ const Index: React.FC = props => {
           />
         </View>
       </Modal>
-      <Modal visible={!!certError} onRequestClose={() => {}} title={certError}>
+      <Modal
+        visible={!!certError}
+        onRequestClose={() => {}}
+        title={'خطای سامانه'}>
         <View
           style={{
             flexDirection: 'column',
