@@ -82,7 +82,7 @@ const Index: React.FC = () => {
   };
 
   const getIsDataEnded = (data: ContractPaginationModel, reset?: boolean) =>
-    !reset && data.totalPages <= data.currentPageNumber;
+    !reset && data.currentPageNumber + 1 >= data.totalPages;
 
   const loadData = async (filterParams: FilterModel) => {
     try {
@@ -104,11 +104,10 @@ const Index: React.FC = () => {
         Number(contactInfo.id),
       );
 
-      const dataEnded = getIsDataEnded(dataResponse, reset);
-
       const contractsWithInitiatorInfoList = await dataWithInitiatorInfo(
         normalizedData,
       );
+      const dataEnded = getIsDataEnded(dataResponse, reset);
 
       setDataToState(contractsWithInitiatorInfoList, reset);
       setIsDataEnded(dataEnded);
@@ -227,12 +226,13 @@ const Index: React.FC = () => {
   };
 
   const loadMoreData = () => {
-    if (data && data.length > 0)
-      setFilter({
-        ...filter,
-        reset: false,
-        pageNumber: filter.pageNumber && filter.pageNumber + 1,
-      });
+    if (loading || isDataEnded) return;
+
+    setFilter(prev => ({
+      ...prev,
+      reset: false,
+      pageNumber: (prev.pageNumber ?? 0) + 1,
+    }));
   };
 
   return (
