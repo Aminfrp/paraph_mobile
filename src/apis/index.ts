@@ -69,6 +69,7 @@ import tokenInfoService from './services/tokenInfo';
 import updateStateService from './services/updateState';
 import uploadFileService from './services/uploadFile';
 import verifyService from './services/verify';
+import closeInvoiceService from './services/closeInvoice.ts';
 
 export {
   addContactService,
@@ -140,4 +141,5 @@ export {
   uploadFileService,
   verifyService,
   podAuthorizeService,
+  closeInvoiceService,
 };

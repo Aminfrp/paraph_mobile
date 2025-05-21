@@ -62,7 +62,7 @@ const Index: React.FC<PropsModel> = props => {
               style={styles.validationIcon}
             />
           )}
-          <Text style={styles.text}>رمز عبور حداقل شامل ۴ حرف نیست.</Text>
+          <Text style={styles.text}>رمز عبور حداقل شامل ۴ عدد نیست.</Text>
         </View>
         <View style={styles.row}>
           {repeatPasswordError ? (

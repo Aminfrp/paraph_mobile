@@ -74,7 +74,7 @@ const Index: React.FC = () => {
           userData.nationalCode_verified &&
           toPersianDigits(userData.nationalCode_verified)
         }
-        title=" تاریخچه خرید گواهی امضای نماد وزارت صمت"
+        title=" تاریخچه خرید گواهی امضای ریشه وزارت صمت"
       />
     </>
   );

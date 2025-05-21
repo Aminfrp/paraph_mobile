@@ -12,6 +12,7 @@ import {toPersianDigits} from '../../../../helpers/convertNumber';
 import Badge from '../../../../components/badge';
 import {InvoiceModel} from '../../../../model/invoice.model';
 import {InvoiceStatuses} from '../../../../model/invoiceStatus.model';
+import {getPersianDate} from '../../../../helpers/date';
 
 type RowPropsModel = {
   title: string;
@@ -86,7 +87,9 @@ const Index: React.FC<PropsModel> = props => {
                 />
                 <Text style={styles.text}>صادر کننده</Text>
               </View>
-              <Text style={styles.text}>بانک مرکزی</Text>
+              <Text style={styles.text}>
+                {item.metadata.invoiceItems[0].productName}
+              </Text>
             </View>
             <View style={styles.paymentHistoryRow}>
               <View style={[styles.paymentHistoryRow]}>
@@ -142,9 +145,23 @@ const Index: React.FC<PropsModel> = props => {
                   source={require('../../../../assets/img/png/calendar.png')}
                   style={{width: 25, height: 25}}
                 />
-                <Text style={styles.text}>تاریخ اعتبار</Text>
+                <Text style={styles.text}>مدت اعتبار</Text>
               </View>
-              <Text style={styles.text}>*</Text>
+              <Text style={styles.text}>یکسال</Text>
+            </View>
+            <View style={styles.paymentHistoryRow}>
+              <View style={[styles.paymentHistoryRow]}>
+                <Image
+                  source={require('../../../../assets/img/png/calendar.png')}
+                  style={{width: 25, height: 25}}
+                />
+                <Text style={styles.text}>تاریخ ایجاد</Text>
+              </View>
+              <Text style={styles.text}>
+                {item.metadata.issueDate
+                  ? getPersianDate(item.metadata.issueDate).date
+                  : '*'}
+              </Text>
             </View>
             <View style={styles.paymentHistoryRow}>
               <View style={[styles.paymentHistoryRow]}>

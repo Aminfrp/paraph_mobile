@@ -44,7 +44,10 @@ import {getCurRouteName} from '../../helpers/getActiveRouteState';
 import saveSignToFile from '../../helpers/saveSignToFile';
 import {deniedPermissionAlert} from '../../helpers/utils';
 import {getNamadCertificateDetails} from '../../modules/certificate/namadCertificate';
-import {getRisheCertificateDetails} from '../../modules/certificate/rishe';
+import {
+  checkCertificateList,
+  getRisheCertificateDetails,
+} from '../../modules/certificate/rishe';
 import getSignerFullName from '../../modules/dataNormalizers/getSignerFullName';
 import loadContract from '../../modules/dataNormalizers/loadContract';
 import {getDownloadFilePath} from '../../modules/document/constant';
@@ -536,10 +539,10 @@ const Index = props => {
 
   const checkRisheCertificateExist = async () => {
     try {
-      const isActive = await getRisheCertificateDetails();
+      const isActive = await checkCertificateList();
 
       if (isActive) {
-        return Promise.resolve(!!isActive);
+        return Promise.resolve(isActive);
       }
       return Promise.resolve(false);
     } catch (error) {
@@ -1136,19 +1139,9 @@ const Index = props => {
       if (isNamadForced) {
         Toast.showToast('danger', '', 'درحال حاضر این سند پشتیبانی نمی شود! ');
         setCheckSignCertificatesLoading(false);
-        // todo: commit namad for main release...
-        // const certificate = await checkNamadCertificateExist();
-        // if (!certificate) {
-        //   if (!userInfo?.asBusiness) {
-        //     setCheckSignCertificatesLoading(false);
-        //
-        //     return navigate(routesName.CERTIFICATE, {
-        //       screen: routesName.NAMAD_CERTIFICATE_REQUEST_PAYMENT,
-        //     });
-        //   }
-        // }
       } else if (isRisheForced) {
         const certificate = await checkRisheCertificateExist();
+
         if (!certificate) {
           if (!userInfo?.asBusiness) {
             setCheckSignCertificatesLoading(false);
@@ -1157,9 +1150,26 @@ const Index = props => {
               screen: routesName.CERTIFICATE,
             });
           }
+        } else {
+          setCheckSignCertificatesLoading(false);
+          navigate(routesName.CONTRACT_SIGN, {
+            onSignByRootCertificate: (password, fileNotExistCallback) =>
+              signByRootCertificateHandler(password, fileNotExistCallback),
+            onSignByNamadCertificate: password =>
+              signByNamadCertificateHandler(password),
+            onSign: () => signContractHandler(),
+            isCertificate,
+            certificateType: getCertificateType(),
+            userInfo,
+            contractNumber: toPersianDigits(
+              activeContractData.contractDto.code,
+            ),
+            trusted: activeContractData?.contractDto.trusted,
+          });
+
+          setCheckSignCertificatesLoading(false);
         }
       }
-
       setCheckSignCertificatesLoading(false);
       navigate(routesName.CONTRACT_SIGN, {
         onSignByRootCertificate: (password, fileNotExistCallback) =>

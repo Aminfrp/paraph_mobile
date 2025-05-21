@@ -56,8 +56,7 @@ const Index: React.FC = () => {
       <ScrollView contentContainerStyle={styles.wrapper}>
         <Text style={styles.textTitle}>مشخصات پرداخت</Text>
         <Text style={styles.text}>
-          جزییات پرداخت را می‌توانید در جدول زیر مشاهده کرده و چنانچه کد تخفیف
-          دارید، وارد کنید. اطمینان حاصل کنید.
+          جزییات پرداخت را می‌توانید در جدول زیر مشاهده کنید.
         </Text>
         <BuyPaymentDetailsCard cost={risheCost} />
         <ImportantPointsBeforePaymentCard />

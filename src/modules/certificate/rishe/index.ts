@@ -3,7 +3,7 @@ export {
   generate as risheGenerate,
   revoke as risheRevoke,
   sign as signByRisheCertificate,
-  getDetails as getRisheCertificateDetails,
+  checkCertificateList,
 } from './certificate';
 
 export {checkInvoice as buyRisheCertificate} from './invoiceManagement/invoiceChecker';

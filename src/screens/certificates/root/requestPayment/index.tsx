@@ -79,7 +79,7 @@ const Index: React.FC = props => {
         </Text>
         <BuyCertificateDetailsCard
           instruction="مرکز ریشه وزارت صمت"
-          expiration="دو سال"
+          expiration="یکسال سال"
           cost={risheCost}
           description="ویژه امضای سفته"
         />

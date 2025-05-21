@@ -1,9 +1,9 @@
-const isDevMode: boolean = false;
+const isDevMode: boolean = true;
 
 const CONTRACT_IV = 'fZNZP__$__cONTRACT__$__iV__Key';
 
-const APP_VERSION = 'm-4-0-0';
-const APP_VERSION_STRING = `4.0.0 ${isDevMode ? 'QC' : ''}`;
+const APP_VERSION = 'm-4-0-2';
+const APP_VERSION_STRING = `4.0.2 ${isDevMode ? 'QC' : ''}`;
 
 const WE_POD_LEVEL_UP_LINK =
   'https://levelup.wepod.ir/fa/profile/standalone-login?theme=219775&logo=QCE7RMLWI1BTVWEW&redirect_url=https:%2F%2Fparaph.me%2Fcallbackapplication';
@@ -21,6 +21,7 @@ let POD_SPACE_UPLOAD_FILE_LINK: string;
 let LANDING_URL: string;
 let PAYMENT_GATEWAY_URL: string;
 let PAYMENT_GATEWAY_CALLBACK_URL: string;
+let GATEWAY_TYPE: string;
 
 const RAD_SANDBOX_SERVER_URL = 'https://rad-sandbox.sandpod.ir/';
 const SSO_SANDBOX_SERVER_URL = 'https://sso-sandbox.sandpod.ir/';
@@ -66,6 +67,7 @@ let AUTHORIZE_SCOPE: string = '';
 
 if (isDevMode) {
   PAYMENT_GATEWAY_URL = PAYMENT_GATEWAY_SANDBOX_URL;
+  GATEWAY_TYPE = 'LOC';
   NAMAD_PRODUCT_INVOICE_ID = NAMAD_SANDBOX_PRODUCT_INVOICE_ID;
   RISHE_PRODUCT_INVOICE_ID = RISHE_SANDBOX_PRODUCT_INVOICE_ID;
 
@@ -84,6 +86,7 @@ if (isDevMode) {
   LANDING_URL = TEST_LANDING_URL;
 } else {
   PAYMENT_GATEWAY_URL = PAYMENT_GATEWAY_MAIN_URL;
+  GATEWAY_TYPE = 'PEP';
   NAMAD_PRODUCT_INVOICE_ID = NAMAD_MAIN_PRODUCT_INVOICE_ID_YE_RIAL;
   RISHE_PRODUCT_INVOICE_ID = RISHE_MAIN_PRODUCT_INVOICE_ID;
 
@@ -127,4 +130,5 @@ export {
   SSO_SERVER_URL,
   USER_NAME,
   WE_POD_LEVEL_UP_LINK,
+  GATEWAY_TYPE,
 };

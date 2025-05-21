@@ -1,11 +1,13 @@
 import {
   changeInvoiceStatusService,
+  closeInvoiceService,
   getAllInvoiceListService,
   invoiceKeySignatureService,
   invoiceWithMetadataService,
 } from '../../../apis';
 import {
   CLIENT_ID,
+  GATEWAY_TYPE,
   PAYMENT_GATEWAY_CALLBACK_URL,
   PAYMENT_GATEWAY_URL,
 } from '../../../config/APIConfig';
@@ -110,7 +112,7 @@ export const generatePaymentUrlByInvoice = async (invoice: InvoiceModel) => {
       timestamp: signature?.data?.timestamp,
       signature: signature?.data?.signature,
       redirectUri: PAYMENT_GATEWAY_CALLBACK_URL,
-      gateway: 'LOC',
+      gateway: GATEWAY_TYPE,
     };
 
     let URL = `${PAYMENT_GATEWAY_URL}?${convertJsonToQueryString(
@@ -203,6 +205,15 @@ export const changeInvoiceStatusByBillNumber = async (
     return Promise.resolve(data);
   } catch (error) {
     Logger.debugLogger('error in changeInvoiceStatusByBillNumber: ', error);
+    return Promise.reject(error);
+  }
+};
+
+export const closeInvoice = async (billNumber: string) => {
+  try {
+    const response = await closeInvoiceService(billNumber);
+    return Promise.resolve(response);
+  } catch (error) {
     return Promise.reject(error);
   }
 };

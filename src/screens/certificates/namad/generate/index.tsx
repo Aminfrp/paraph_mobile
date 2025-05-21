@@ -183,7 +183,7 @@ const Index: React.FC = () => {
               تعیین رمز گواهی امضای نماد بانک مرکزی
             </Text>
             <Text style={styles.text}>
-              یک رمز که حداقل شامل 4 حرف باشد برای گواهی امضا خود مشخص کنید.
+              یک رمز که حداقل شامل 4 عدد باشد برای گواهی امضا خود مشخص کنید.
             </Text>
             <CertificatePasswordForm
               value={password}

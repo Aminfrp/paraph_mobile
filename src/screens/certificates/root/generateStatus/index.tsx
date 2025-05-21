@@ -80,8 +80,8 @@ const Index: React.FC = () => {
         <CertificateGenerateStatusCard
           isSuccess={status}
           status={status ? 'فعال' : 'دریافت نشده'}
-          initiator="بانک مرکزی"
-          expirationDate={'*'}
+          initiator="مرکز ریشه وزارت صمت"
+          expirationDate={status ? 'یکسال' : '*'}
           requester={userData?.firstName + ' ' + userData?.lastName || ''}
           phoneNumber={toPersianDigits(userData?.phone)}
           nationalCode={

@@ -1,5 +1,5 @@
 import React, {useState, useContext, useCallback, useEffect} from 'react';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import {
   useFocusEffect,
   useIsFocused,
@@ -174,6 +174,7 @@ const Index: React.FC = () => {
   };
 
   const setDataToState = (dataList: ContractModel[], reset?: boolean) => {
+    debugger;
     if (reset) {
       setData(dataList);
     } else {
@@ -247,7 +248,6 @@ const Index: React.FC = () => {
     <>
       {getContractByIdLoading && <AbsoluteLoading />}
       {loading && <AbsoluteLoading />}
-
       {!userTokenInfo?.loading && isFocused ? (
         <View style={styles.wrapper}>
           <ContractList

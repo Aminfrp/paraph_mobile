@@ -19,6 +19,7 @@ import {DraftModel} from '../../model/draft.model.ts';
 import {SignerDto} from '../../model/contract.model.ts';
 import {UserProfileModel} from '../../model/userProfile.model.ts';
 import {Logger} from '../../modules/log/logger.ts';
+import {Text} from 'react-native';
 
 type FilterModel = {
   reset?: boolean;

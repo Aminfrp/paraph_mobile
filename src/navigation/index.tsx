@@ -29,17 +29,17 @@ const AppNavContainer: React.FC = () => {
   const {isDeviceRooted, isEmulator} = useSecurityUtils();
   const {authLoaded, isLoggedIn} = useAppAuthenticatedProcess();
 
-  // if (isDeviceRooted) {
-  //   return (
-  //     <BlockApplication text="شما اجازه دسترسی به برنامه در حالت روت بودن دستگاه را ندارید..." />
-  //   );
-  // }
+  if (isDeviceRooted) {
+    return (
+      <BlockApplication text="شما اجازه دسترسی به برنامه در حالت روت بودن دستگاه را ندارید..." />
+    );
+  }
 
-  // if (isEmulator) {
-  //   return (
-  //     <BlockApplication text="شما اجازه دسترسی به محیط تست را ندارید..." />
-  //   );
-  // }
+  if (isEmulator) {
+    return (
+      <BlockApplication text="شما اجازه دسترسی به محیط تست را ندارید..." />
+    );
+  }
 
   return (
     <>

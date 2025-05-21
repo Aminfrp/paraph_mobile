@@ -139,7 +139,7 @@ const Index: React.FC = props => {
           await removeAsyncStorage(ssoId + '-password');
           break;
         }
-        await sleep(30000);
+        await sleep(10000);
       }
 
       if (certificate) {

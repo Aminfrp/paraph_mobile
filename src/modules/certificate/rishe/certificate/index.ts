@@ -1,4 +1,4 @@
-import {risheInquiryService} from '../../../../apis';
+import {getCertificateListService, risheInquiryService} from '../../../../apis';
 import * as Toast from '../../../../components/toastNotification/utils';
 
 import getLoggedInUserSSOID from '../../../../helpers/getLoggedInUserSSOID';
@@ -24,6 +24,7 @@ import {
 } from '../../utils/fileManager';
 import {
   changeInvoiceStatusByBillNumber,
+  closeInvoice,
   getCertificateInvoices,
   getInvoiceBillNumber,
   getInvoiceKeyId,
@@ -109,6 +110,8 @@ export const generate = async (
 export const revoke = async (certificate: string) => {
   try {
     const revokedResponse = await revokeByCertificate(certificate);
+    console.log('revokedResponse', revokedResponse);
+
     if (revokedResponse) {
       await removeCertificateFile(certificateType);
       await certificateLogger(
@@ -181,19 +184,10 @@ export const sign = async (
   }
 };
 
-export const getDetails = async () => {
+export const checkCertificateList = async () => {
   try {
-    const isCertificateExist = await readCertificateFile(certificateType);
-    const invoices = await getCertificateInvoices(certificateType);
-    const invoice = getLastInvoice(invoices);
-
-    if (isCertificateExist && invoice) {
-      const _keyId = getInvoiceKeyId(invoice);
-      const certificateData = await getByKeyId(_keyId);
-
-      return Promise.resolve(certificateData);
-    }
-    return Promise.resolve(null);
+    const certificates = await getCertificateListService();
+    return Promise.resolve(!!certificates.data.length);
   } catch (error) {
     Logger.debugLogger('error in getDetails: ', error);
     return Promise.reject(error);
@@ -294,7 +288,7 @@ const generateCertificateByCSR = async (
         await removeAsyncStorage(ssoId + '-password');
         break;
       }
-      await sleep(30000);
+      await sleep(10000);
     }
     return Promise.resolve(certificate);
   } catch (error) {
@@ -329,6 +323,7 @@ const risheInquiry = async (keyId: string, requestId: string) => {
 const revokeCertificateErrorHandler = (error: any) => {
   Toast.showToast('danger', 'ابطال گواهی', 'خطا در ابطال گواهی');
   Logger.debugLogger('error in revokeCertificateErrorHandler: ', error);
+
   return Promise.reject(error);
 };
 
